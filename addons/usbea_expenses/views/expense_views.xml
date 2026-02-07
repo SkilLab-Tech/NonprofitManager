@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend HR Expense Form with Grant Fields -->
+    <record id="view_hr_expense_form_inherit_usbea" model="ir.ui.view">
+        <field name="name">hr.expense.form.inherit.usbea</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="grant_id"/>
+                <field name="program_id"/>
+                <field name="expense_category"/>
+                <field name="grant_budget_line_id"
+                       invisible="not grant_id"/>
+                <field name="requires_grant_approval" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend HR Expense List with Grant Column -->
+    <record id="view_hr_expense_list_inherit_usbea" model="ir.ui.view">
+        <field name="name">hr.expense.list.inherit.usbea</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.view_my_expenses_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="grant_id" optional="show"/>
+                <field name="program_id" optional="hide"/>
+                <field name="expense_category" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

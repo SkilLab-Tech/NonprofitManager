@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_usbea_program" model="ir.sequence">
+            <field name="name">USBEA Program Sequence</field>
+            <field name="code">usbea.program</field>
+            <field name="prefix">PRG/%(year)s/</field>
+            <field name="padding">3</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_grant_user,usbea.grant.user,model_usbea_grant,usbea_grants.group_grant_user,1,0,0,0
+access_grant_manager,usbea.grant.manager,model_usbea_grant,usbea_grants.group_grant_manager,1,1,1,0
+access_grant_admin,usbea.grant.admin,model_usbea_grant,usbea_grants.group_grant_admin,1,1,1,1
+access_grant_board,usbea.grant.board,model_usbea_grant,usbea_grants.group_board_member,1,0,0,0
+access_grant_expense_user,usbea.grant.expense.user,model_usbea_grant_expense,usbea_grants.group_grant_user,1,1,1,0
+access_grant_expense_manager,usbea.grant.expense.manager,model_usbea_grant_expense,usbea_grants.group_grant_manager,1,1,1,1
+access_grant_expense_board,usbea.grant.expense.board,model_usbea_grant_expense,usbea_grants.group_board_member,1,0,0,0
+access_grant_disbursement_user,usbea.grant.disbursement.user,model_usbea_grant_disbursement,usbea_grants.group_grant_user,1,0,0,0
+access_grant_disbursement_manager,usbea.grant.disbursement.manager,model_usbea_grant_disbursement,usbea_grants.group_grant_manager,1,1,1,1
+access_grant_disbursement_board,usbea.grant.disbursement.board,model_usbea_grant_disbursement,usbea_grants.group_board_member,1,0,0,0
+access_grant_report_user,usbea.grant.report.user,model_usbea_grant_report,usbea_grants.group_grant_user,1,1,1,0
+access_grant_report_manager,usbea.grant.report.manager,model_usbea_grant_report,usbea_grants.group_grant_manager,1,1,1,1
+access_grant_report_board,usbea.grant.report.board,model_usbea_grant_report,usbea_grants.group_board_member,1,0,0,0
+access_grant_budget_user,usbea.grant.budget.user,model_usbea_grant_budget,usbea_grants.group_grant_user,1,0,0,0
+access_grant_budget_manager,usbea.grant.budget.manager,model_usbea_grant_budget,usbea_grants.group_grant_manager,1,1,1,1
+access_grant_budget_board,usbea.grant.budget.board,model_usbea_grant_budget,usbea_grants.group_board_member,1,0,0,0

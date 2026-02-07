@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-level USBEA Menu -->
+    <menuitem id="menu_usbea_root"
+              name="USBEA"
+              web_icon="usbea_grants,static/description/icon.png"
+              sequence="200"/>
+
+    <!-- Grant Management Sub-menu -->
+    <menuitem id="menu_grant_root"
+              name="Grant Management"
+              parent="menu_usbea_root"
+              sequence="10"/>
+
+    <menuitem id="menu_grant_grants"
+              name="Grants"
+              parent="menu_grant_root"
+              action="action_grant"
+              sequence="10"/>
+
+    <menuitem id="menu_grant_expenses"
+              name="Expenses"
+              parent="menu_grant_root"
+              action="action_grant_expense"
+              sequence="20"/>
+
+    <menuitem id="menu_grant_disbursements"
+              name="Disbursements"
+              parent="menu_grant_root"
+              action="action_grant_disbursement"
+              sequence="30"/>
+
+    <menuitem id="menu_grant_budgets"
+              name="Budgets"
+              parent="menu_grant_root"
+              action="action_grant_budget"
+              sequence="40"/>
+
+    <!-- Compliance Sub-menu -->
+    <menuitem id="menu_compliance_root"
+              name="Compliance"
+              parent="menu_usbea_root"
+              sequence="20"/>
+
+    <menuitem id="menu_compliance_reports"
+              name="Reports"
+              parent="menu_compliance_root"
+              action="action_grant_report"
+              sequence="10"/>
+</odoo>

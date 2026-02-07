@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Program Form View -->
+    <record id="view_program_form" model="ir.ui.view">
+        <field name="name">usbea.program.form</field>
+        <field name="model">usbea.program</field>
+        <field name="arch" type="xml">
+            <form string="Program">
+                <header>
+                    <button name="action_start_recruiting" string="Start Recruiting"
+                            type="object" class="btn-primary"
+                            invisible="state != 'planning'"/>
+                    <button name="action_activate" string="Activate"
+                            type="object" class="btn-primary"
+                            invisible="state != 'recruiting'"
+                            groups="usbea_programs.group_program_manager"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-success"
+                            invisible="state != 'active'"
+                            groups="usbea_programs.group_program_manager"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('completed', 'cancelled')"
+                            groups="usbea_programs.group_program_manager"/>
+                    <button name="action_reset_planning" string="Reset to Planning"
+                            type="object"
+                            invisible="state != 'cancelled'"
+                            groups="usbea_programs.group_program_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="planning,recruiting,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_participants" type="object"
+                                class="oe_stat_button" icon="fa-users">
+                            <field name="participant_count" widget="statinfo"
+                                   string="Participants"/>
+                        </button>
+                        <button name="action_view_events" type="object"
+                                class="oe_stat_button" icon="fa-calendar">
+                            <field name="event_count" widget="statinfo"
+                                   string="Events"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Program Name"/>
+                        </h1>
+                        <h2>
+                            <field name="program_code"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Program Details">
+                            <field name="program_type"/>
+                            <field name="responsible_id"/>
+                            <field name="max_participants"/>
+                            <field name="location"/>
+                            <field name="country_ids" widget="many2many_tags"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Dates &amp; Visa">
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="visa_type"/>
+                            <field name="visa_sponsor"
+                                   invisible="visa_type == 'none'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Financial">
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="budget"/>
+                            <field name="spent_amount"/>
+                            <field name="grant_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Participants" name="participants">
+                            <field name="participant_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="email"/>
+                                    <field name="role"/>
+                                    <field name="visa_status"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'applied'"
+                                           decoration-success="state in ('accepted', 'active', 'completed')"
+                                           decoration-danger="state == 'withdrawn'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Events" name="events">
+                            <field name="event_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="event_type"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="location"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Program List View -->
+    <record id="view_program_list" model="ir.ui.view">
+        <field name="name">usbea.program.list</field>
+        <field name="model">usbea.program</field>
+        <field name="arch" type="xml">
+            <list string="Programs"
+                  decoration-muted="state == 'cancelled'"
+                  decoration-success="state == 'completed'">
+                <field name="program_code"/>
+                <field name="name"/>
+                <field name="program_type"/>
+                <field name="participant_count"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="budget"/>
+                <field name="responsible_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('planning', 'recruiting')"
+                       decoration-success="state in ('active', 'completed')"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Program Kanban View -->
+    <record id="view_program_kanban" model="ir.ui.view">
+        <field name="name">usbea.program.kanban</field>
+        <field name="model">usbea.program</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="program_type"/>
+                <field name="participant_count"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="state"/>
+                <field name="responsible_id"/>
+                <templates>
+                    <t t-name="card">
+                        <strong><field name="name"/></strong>
+                        <div class="text-muted"><field name="program_type"/></div>
+                        <div>Participants: <field name="participant_count"/></div>
+                        <div><field name="start_date"/> - <field name="end_date"/></div>
+                        <div class="mt-2">
+                            <field name="responsible_id" widget="many2one_avatar_user"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Program Search View -->
+    <record id="view_program_search" model="ir.ui.view">
+        <field name="name">usbea.program.search</field>
+        <field name="model">usbea.program</field>
+        <field name="arch" type="xml">
+            <search string="Search Programs">
+                <field name="name"/>
+                <field name="program_code"/>
+                <field name="responsible_id"/>
+                <filter string="My Programs" name="my_programs"
+                        domain="[('responsible_id', '=', uid)]"/>
+                <filter string="Active" name="active_programs"
+                        domain="[('state', '=', 'active')]"/>
+                <filter string="Recruiting" name="recruiting"
+                        domain="[('state', '=', 'recruiting')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'program_type'}"/>
+                    <filter string="Coordinator" name="group_responsible"
+                            context="{'group_by': 'responsible_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Program Action -->
+    <record id="action_program" model="ir.actions.act_window">
+        <field name="name">Programs</field>
+        <field name="res_model">usbea.program</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_program_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first exchange program
+            </p>
+            <p>
+                Manage exchange programs, track participants, and coordinate visa processes.
+            </p>
+        </field>
+    </record>
+</odoo>
