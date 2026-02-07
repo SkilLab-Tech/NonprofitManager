@@ -3,7 +3,7 @@
     <!-- Program Management Sub-menu (under USBEA root) -->
     <menuitem id="menu_program_root"
               name="Programs"
-              parent="usbea_grants.menu_usbea_root"
+              parent="usbea_rbac.menu_usbea_root"
               sequence="15"/>
 
     <menuitem id="menu_programs_list"

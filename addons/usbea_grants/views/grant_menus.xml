@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Top-level USBEA Menu -->
-    <menuitem id="menu_usbea_root"
-              name="USBEA"
-              web_icon="usbea_grants,static/description/icon.png"
-              sequence="200"/>
-
-    <!-- Grant Management Sub-menu -->
+    <!-- Grant Management Sub-menu (under USBEA root from usbea_rbac) -->
     <menuitem id="menu_grant_root"
               name="Grant Management"
-              parent="menu_usbea_root"
+              parent="usbea_rbac.menu_usbea_root"
               sequence="10"/>
 
     <menuitem id="menu_grant_grants"
@@ -39,7 +33,7 @@
     <!-- Compliance Sub-menu -->
     <menuitem id="menu_compliance_root"
               name="Compliance"
-              parent="menu_usbea_root"
+              parent="usbea_rbac.menu_usbea_root"
               sequence="20"/>
 
     <menuitem id="menu_compliance_reports"

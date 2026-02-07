@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Module Categories                            -->
+    <!-- ============================================ -->
+
+    <!-- Root category for all USBEA groups -->
+    <record id="module_category_usbea" model="ir.module.category">
+        <field name="name">USBEA</field>
+        <field name="description">USBEA Brasil Nonprofit Management</field>
+        <field name="sequence">200</field>
+    </record>
+
+    <!-- Platform-level access control category -->
+    <record id="module_category_usbea_platform" model="ir.module.category">
+        <field name="name">USBEA Platform</field>
+        <field name="description">Platform-level access control for USBEA white-label system</field>
+        <field name="sequence">199</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Platform Security Groups (hierarchy)         -->
+    <!-- Viewer < Member < Manager < Org Admin < Super Admin -->
+    <!-- ============================================ -->
+
+    <!-- Viewer: Read-only access -->
+    <record id="group_platform_org_viewer" model="res.groups">
+        <field name="name">Viewer (Read-Only)</field>
+        <field name="category_id" ref="module_category_usbea_platform"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Member: Basic operational access -->
+    <record id="group_platform_org_member" model="res.groups">
+        <field name="name">Organization Member</field>
+        <field name="category_id" ref="module_category_usbea_platform"/>
+        <field name="implied_ids" eval="[(4, ref('group_platform_org_viewer'))]"/>
+    </record>
+
+    <!-- Manager: Manage operational data -->
+    <record id="group_platform_org_manager" model="res.groups">
+        <field name="name">Organization Manager</field>
+        <field name="category_id" ref="module_category_usbea_platform"/>
+        <field name="implied_ids" eval="[(4, ref('group_platform_org_member'))]"/>
+    </record>
+
+    <!-- Org Admin: Full org-level access, user management -->
+    <record id="group_platform_org_admin" model="res.groups">
+        <field name="name">Organization Admin</field>
+        <field name="category_id" ref="module_category_usbea_platform"/>
+        <field name="implied_ids" eval="[(4, ref('group_platform_org_manager'))]"/>
+    </record>
+
+    <!-- Super Admin: Full platform access, can create/manage all orgs -->
+    <record id="group_platform_super_admin" model="res.groups">
+        <field name="name">Super Admin</field>
+        <field name="category_id" ref="module_category_usbea_platform"/>
+        <field name="implied_ids" eval="[(4, ref('group_platform_org_admin'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Record Rules: Multi-tenant data isolation    -->
+    <!-- ============================================ -->
+
+    <!-- Organization: Super admins see all, others see only their own -->
+    <record id="rule_company_super_admin" model="ir.rule">
+        <field name="name">Organization: Super Admin sees all</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_platform_super_admin'))]"/>
+    </record>
+
+    <!-- Invitations: Users see invitations for their organization -->
+    <record id="rule_invitation_org" model="ir.rule">
+        <field name="name">Invitation: Org members see own org</field>
+        <field name="model_id" ref="model_usbea_user_invitation"/>
+        <field name="domain_force">[('organization_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_platform_org_admin'))]"/>
+    </record>
+
+    <record id="rule_invitation_super_admin" model="ir.rule">
+        <field name="name">Invitation: Super Admin sees all</field>
+        <field name="model_id" ref="model_usbea_user_invitation"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_platform_super_admin'))]"/>
+    </record>
+
+    <!-- Custom Roles: Org admins see their org's roles -->
+    <record id="rule_role_org" model="ir.rule">
+        <field name="name">Role: Org sees own roles</field>
+        <field name="model_id" ref="model_usbea_platform_role"/>
+        <field name="domain_force">[('organization_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_platform_org_member'))]"/>
+    </record>
+
+    <record id="rule_role_super_admin" model="ir.rule">
+        <field name="name">Role: Super Admin sees all roles</field>
+        <field name="model_id" ref="model_usbea_platform_role"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_platform_super_admin'))]"/>
+    </record>
+</odoo>

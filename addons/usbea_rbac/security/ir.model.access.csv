@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_role_viewer,usbea.platform.role.viewer,model_usbea_platform_role,usbea_rbac.group_platform_org_viewer,1,0,0,0
+access_role_member,usbea.platform.role.member,model_usbea_platform_role,usbea_rbac.group_platform_org_member,1,0,0,0
+access_role_org_admin,usbea.platform.role.org_admin,model_usbea_platform_role,usbea_rbac.group_platform_org_admin,1,1,1,1
+access_role_super_admin,usbea.platform.role.super_admin,model_usbea_platform_role,usbea_rbac.group_platform_super_admin,1,1,1,1
+access_invitation_org_admin,usbea.user.invitation.org_admin,model_usbea_user_invitation,usbea_rbac.group_platform_org_admin,1,1,1,1
+access_invitation_super_admin,usbea.user.invitation.super_admin,model_usbea_user_invitation,usbea_rbac.group_platform_super_admin,1,1,1,1
+access_invite_wizard_org_admin,usbea.invite.user.wizard.org_admin,model_usbea_invite_user_wizard,usbea_rbac.group_platform_org_admin,1,1,1,0
+access_invite_wizard_super_admin,usbea.invite.user.wizard.super_admin,model_usbea_invite_user_wizard,usbea_rbac.group_platform_super_admin,1,1,1,0

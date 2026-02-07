@@ -2,13 +2,13 @@
 <odoo>
     <record id="group_program_user" model="res.groups">
         <field name="name">Program User</field>
-        <field name="category_id" ref="usbea_grants.module_category_usbea"/>
+        <field name="category_id" ref="usbea_rbac.module_category_usbea"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
     <record id="group_program_manager" model="res.groups">
         <field name="name">Program Manager</field>
-        <field name="category_id" ref="usbea_grants.module_category_usbea"/>
+        <field name="category_id" ref="usbea_rbac.module_category_usbea"/>
         <field name="implied_ids" eval="[(4, ref('usbea_programs.group_program_user'))]"/>
     </record>
 </odoo>

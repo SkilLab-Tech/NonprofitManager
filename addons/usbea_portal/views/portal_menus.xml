@@ -3,7 +3,7 @@
     <!-- Board Dashboard Sub-menu -->
     <menuitem id="menu_board_root"
               name="Board Dashboard"
-              parent="usbea_grants.menu_usbea_root"
+              parent="usbea_rbac.menu_usbea_root"
               sequence="5"
               groups="usbea_grants.group_board_member"/>
 

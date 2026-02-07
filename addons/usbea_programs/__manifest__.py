@@ -13,7 +13,7 @@
     """,
     'author': 'Automation Labs / SkilLab',
     'website': 'https://automation-labs.co',
-    'depends': ['base', 'mail', 'usbea_grants'],
+    'depends': ['base', 'mail', 'usbea_rbac', 'usbea_grants'],
     'data': [
         'security/program_security.xml',
         'security/ir.model.access.csv',

@@ -14,7 +14,7 @@
     """,
     'author': 'Automation Labs / SkilLab',
     'website': 'https://automation-labs.co',
-    'depends': ['base', 'mail', 'account'],
+    'depends': ['base', 'mail', 'account', 'usbea_rbac'],
     'data': [
         'security/grant_security.xml',
         'security/ir.model.access.csv',
