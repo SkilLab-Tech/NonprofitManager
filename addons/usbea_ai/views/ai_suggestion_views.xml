@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_usbea_ai_suggestion_list" model="ir.ui.view">
+        <field name="name">usbea.ai.suggestion.list</field>
+        <field name="model">usbea.ai.suggestion</field>
+        <field name="arch" type="xml">
+            <list string="AI Suggestions" default_order="create_date desc" decoration-success="accepted" decoration-muted="rejected" decoration-warning="error">
+                <field name="create_date" string="When"/>
+                <field name="template_id"/>
+                <field name="model_used"/>
+                <field name="tokens_in" string="Tok In"/>
+                <field name="tokens_out" string="Tok Out"/>
+                <field name="cache_hit" widget="boolean_toggle"/>
+                <field name="latency_ms" string="ms"/>
+                <field name="lgpd_redacted" widget="boolean_toggle"/>
+                <field name="accepted" widget="boolean_toggle"/>
+                <field name="rejected" widget="boolean_toggle"/>
+                <field name="source_module"/>
+                <field name="error" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_usbea_ai_suggestion_form" model="ir.ui.view">
+        <field name="name">usbea.ai.suggestion.form</field>
+        <field name="model">usbea.ai.suggestion</field>
+        <field name="arch" type="xml">
+            <form string="AI Suggestion" create="false">
+                <header>
+                    <button name="action_accept" string="Accept" type="object" class="btn-primary" invisible="accepted"/>
+                    <button name="action_reject" string="Reject" type="object" invisible="rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="template_id"/>
+                            <field name="model_used"/>
+                            <field name="prompt_hash"/>
+                            <field name="cache_hit"/>
+                            <field name="latency_ms"/>
+                        </group>
+                        <group>
+                            <field name="tokens_in"/>
+                            <field name="tokens_out"/>
+                            <field name="lgpd_redacted"/>
+                            <field name="redaction_types"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="source_module"/>
+                        <field name="source_model"/>
+                        <field name="source_record_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Response">
+                            <field name="response" widget="text" readonly="1"/>
+                        </page>
+                        <page string="Context (truncated)">
+                            <field name="context_json" widget="text" readonly="1"/>
+                        </page>
+                        <page string="Error" invisible="not error">
+                            <field name="error" readonly="1"/>
+                        </page>
+                        <page string="Related partners (DSAR)">
+                            <field name="partner_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_usbea_ai_suggestion_search" model="ir.ui.view">
+        <field name="name">usbea.ai.suggestion.search</field>
+        <field name="model">usbea.ai.suggestion</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="template_id"/>
+                <field name="source_module"/>
+                <field name="source_model"/>
+                <field name="model_used"/>
+                <filter name="accepted" string="Accepted" domain="[('accepted', '=', True)]"/>
+                <filter name="rejected" string="Rejected" domain="[('rejected', '=', True)]"/>
+                <filter name="redacted" string="LGPD redacted" domain="[('lgpd_redacted', '=', True)]"/>
+                <filter name="errors" string="Errors" domain="[('error', '!=', False)]"/>
+                <group expand="0" string="Group by">
+                    <filter name="group_template" string="Template" context="{'group_by': 'template_id'}"/>
+                    <filter name="group_module" string="Source module" context="{'group_by': 'source_module'}"/>
+                    <filter name="group_model_used" string="Model used" context="{'group_by': 'model_used'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_usbea_ai_suggestion" model="ir.actions.act_window">
+        <field name="name">AI Suggestions (Audit Log)</field>
+        <field name="res_model">usbea.ai.suggestion</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_usbea_ai_suggestion_search"/>
+    </record>
+
+</odoo>
