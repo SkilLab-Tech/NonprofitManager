@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- "My Week" filtered action — staff land here from the menu. -->
+    <record id="action_usbea_task_my_week" model="ir.actions.act_window">
+        <field name="name">My week</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form,calendar,gantt,activity</field>
+        <field name="domain">[('is_in_my_week', '=', True)]</field>
+        <field name="context">{'search_default_my_week': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nothing on your plate this week. Plan ahead, or check the full task board.
+            </p>
+        </field>
+    </record>
+
+    <!-- AI high-priority lens (>=70 score) — for staff to triage. -->
+    <record id="action_usbea_task_ai_focus" model="ir.actions.act_window">
+        <field name="name">AI focus</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('usbea_priority_ai', '>=', 70)]</field>
+        <field name="context">{'search_default_ai_high_priority': 1}</field>
+    </record>
+
+</odoo>

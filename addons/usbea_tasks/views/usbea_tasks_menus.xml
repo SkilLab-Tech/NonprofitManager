@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_usbea_tasks_root"
+              name="USBEA Tasks"
+              sequence="55"
+              groups="usbea_tasks.group_usbea_tasks_user"
+              web_icon="usbea_tasks,static/description/icon.png"/>
+
+    <menuitem id="menu_usbea_tasks_my_week"
+              parent="menu_usbea_tasks_root"
+              name="My week"
+              action="action_usbea_task_my_week"
+              sequence="10"/>
+
+    <menuitem id="menu_usbea_tasks_ai_focus"
+              parent="menu_usbea_tasks_root"
+              name="AI focus"
+              action="action_usbea_task_ai_focus"
+              sequence="20"
+              groups="usbea_ai.group_usbea_ai_user"/>
+
+    <menuitem id="menu_usbea_tasks_templates"
+              parent="menu_usbea_tasks_root"
+              name="Templates"
+              action="action_usbea_task_template"
+              sequence="90"
+              groups="usbea_tasks.group_usbea_tasks_manager"/>
+
+</odoo>
