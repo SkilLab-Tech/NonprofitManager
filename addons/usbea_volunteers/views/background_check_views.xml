@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bg_check_list" model="ir.ui.view">
+        <field name="name">usbea.volunteer.background_check.list</field>
+        <field name="model">usbea.volunteer.background_check</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'" decoration-warning="state == 'expiring_soon'" decoration-danger="state in ('expired', 'revoked')">
+                <field name="partner_id"/>
+                <field name="check_type"/>
+                <field name="issued_on"/>
+                <field name="expires_on"/>
+                <field name="state"/>
+                <field name="provider"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bg_check_form" model="ir.ui.view">
+        <field name="name">usbea.volunteer.background_check.form</field>
+        <field name="model">usbea.volunteer.background_check</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="check_type"/>
+                            <field name="provider"/>
+                            <field name="document_ref"/>
+                        </group>
+                        <group>
+                            <field name="issued_on"/>
+                            <field name="expires_on"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bg_check" model="ir.actions.act_window">
+        <field name="name">Background Checks</field>
+        <field name="res_model">usbea.volunteer.background_check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

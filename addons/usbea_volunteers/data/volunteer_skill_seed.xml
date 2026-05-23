@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Top-level categories -->
+        <record id="skill_cat_mentoring" model="usbea.volunteer.skill">
+            <field name="name">Mentoring</field>
+            <field name="technical_key">cat_mentoring</field>
+            <field name="description">Mentoring alumni or program participants.</field>
+        </record>
+        <record id="skill_cat_translation" model="usbea.volunteer.skill">
+            <field name="name">Translation &amp; interpretation</field>
+            <field name="technical_key">cat_translation</field>
+        </record>
+        <record id="skill_cat_events" model="usbea.volunteer.skill">
+            <field name="name">Event operations</field>
+            <field name="technical_key">cat_events</field>
+        </record>
+        <record id="skill_cat_marketing" model="usbea.volunteer.skill">
+            <field name="name">Marketing &amp; communications</field>
+            <field name="technical_key">cat_marketing</field>
+        </record>
+        <record id="skill_cat_legal" model="usbea.volunteer.skill">
+            <field name="name">Legal &amp; compliance</field>
+            <field name="technical_key">cat_legal</field>
+        </record>
+        <record id="skill_cat_tech" model="usbea.volunteer.skill">
+            <field name="name">Technology</field>
+            <field name="technical_key">cat_tech</field>
+        </record>
+        <record id="skill_cat_fundraising" model="usbea.volunteer.skill">
+            <field name="name">Fundraising</field>
+            <field name="technical_key">cat_fundraising</field>
+        </record>
+
+        <!-- A few level-2 examples -->
+        <record id="skill_translation_pt_en" model="usbea.volunteer.skill">
+            <field name="name">PT-BR ↔ EN-US</field>
+            <field name="technical_key">translation_pt_en</field>
+            <field name="parent_id" ref="skill_cat_translation"/>
+        </record>
+        <record id="skill_marketing_social" model="usbea.volunteer.skill">
+            <field name="name">Social media</field>
+            <field name="technical_key">marketing_social</field>
+            <field name="parent_id" ref="skill_cat_marketing"/>
+        </record>
+        <record id="skill_tech_web" model="usbea.volunteer.skill">
+            <field name="name">Web development</field>
+            <field name="technical_key">tech_web</field>
+            <field name="parent_id" ref="skill_cat_tech"/>
+        </record>
+    </data>
+</odoo>

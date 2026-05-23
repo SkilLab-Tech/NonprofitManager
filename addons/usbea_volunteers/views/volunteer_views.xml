@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_form_volunteer" model="ir.ui.view">
+        <field name="name">res.partner.form.volunteer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Volunteer" groups="usbea_volunteers.group_volunteers_coordinator"
+                      invisible="usbea_archetype != 'volunteer'">
+                    <group>
+                        <group>
+                            <field name="volunteer_hours_total" readonly="1"/>
+                            <field name="volunteer_latest_bg_state" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="volunteer_skill_ids" widget="many2many_tags"/>
+                    <notebook>
+                        <page string="Availability">
+                            <field name="volunteer_slot_ids"/>
+                        </page>
+                        <page string="Background checks">
+                            <field name="volunteer_bg_check_ids"/>
+                        </page>
+                    </notebook>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_volunteer_partners" model="ir.actions.act_window">
+        <field name="name">Volunteers</field>
+        <field name="res_model">res.partner</field>
+        <field name="domain">[('usbea_archetype', '=', 'volunteer')]</field>
+        <field name="context">{'default_usbea_archetype': 'volunteer', 'default_is_company': False}</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_volunteers_root" name="USBEA Volunteers" sequence="58" groups="usbea_volunteers.group_volunteers_coordinator"/>
+
+    <menuitem id="menu_vol_partners" parent="menu_volunteers_root" name="Volunteers" action="action_volunteer_partners" sequence="10"/>
+    <menuitem id="menu_vol_opportunities" parent="menu_volunteers_root" name="Opportunities" action="action_opportunity" sequence="20"/>
+    <menuitem id="menu_vol_hours" parent="menu_volunteers_root" name="Hours log" action="action_hours_log" sequence="30"/>
+    <menuitem id="menu_vol_bg_checks" parent="menu_volunteers_root" name="Background checks" action="action_bg_check" sequence="40"/>
+    <menuitem id="menu_vol_skills" parent="menu_volunteers_root" name="Skills taxonomy" action="action_skill" sequence="90" groups="usbea_volunteers.group_volunteers_manager"/>
+</odoo>

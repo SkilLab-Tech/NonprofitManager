@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_skill_list" model="ir.ui.view">
+        <field name="name">usbea.volunteer.skill.list</field>
+        <field name="model">usbea.volunteer.skill</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="complete_name"/>
+                <field name="technical_key"/>
+                <field name="parent_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_skill_form" model="ir.ui.view">
+        <field name="name">usbea.volunteer.skill.form</field>
+        <field name="model">usbea.volunteer.skill</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="technical_key"/>
+                        <field name="parent_id"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_skill" model="ir.actions.act_window">
+        <field name="name">Volunteer Skills</field>
+        <field name="res_model">usbea.volunteer.skill</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

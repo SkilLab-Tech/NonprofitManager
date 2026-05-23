@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_slot_list" model="ir.ui.view">
+        <field name="name">usbea.volunteer.availability_slot.list</field>
+        <field name="model">usbea.volunteer.availability_slot</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="partner_id"/>
+                <field name="weekday"/>
+                <field name="start_hour" widget="float_time"/>
+                <field name="end_hour" widget="float_time"/>
+                <field name="timezone"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_slot" model="ir.actions.act_window">
+        <field name="name">Availability slots</field>
+        <field name="res_model">usbea.volunteer.availability_slot</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

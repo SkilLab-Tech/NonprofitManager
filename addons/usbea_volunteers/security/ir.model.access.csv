@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_skill_user,usbea.volunteer.skill.user,model_usbea_volunteer_skill,group_volunteers_coordinator,1,0,0,0
+access_skill_manager,usbea.volunteer.skill.manager,model_usbea_volunteer_skill,group_volunteers_manager,1,1,1,1
+access_slot_user,usbea.volunteer.availability_slot.user,model_usbea_volunteer_availability_slot,group_volunteers_coordinator,1,1,1,0
+access_slot_manager,usbea.volunteer.availability_slot.manager,model_usbea_volunteer_availability_slot,group_volunteers_manager,1,1,1,1
+access_bg_check_user,usbea.volunteer.background_check.user,model_usbea_volunteer_background_check,group_volunteers_coordinator,1,1,1,0
+access_bg_check_manager,usbea.volunteer.background_check.manager,model_usbea_volunteer_background_check,group_volunteers_manager,1,1,1,1
+access_opportunity_user,usbea.volunteer.opportunity.user,model_usbea_volunteer_opportunity,group_volunteers_coordinator,1,1,1,0
+access_opportunity_manager,usbea.volunteer.opportunity.manager,model_usbea_volunteer_opportunity,group_volunteers_manager,1,1,1,1
+access_hours_log_user,usbea.volunteer.hours_log.user,model_usbea_volunteer_hours_log,group_volunteers_coordinator,1,1,1,0
+access_hours_log_manager,usbea.volunteer.hours_log.manager,model_usbea_volunteer_hours_log,group_volunteers_manager,1,1,1,1
