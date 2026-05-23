@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Mark the default company as platform root -->
+        <record id="base.main_company" model="res.company">
+            <field name="is_platform_root">True</field>
+            <field name="subscription_status">active</field>
+            <field name="subscription_plan">enterprise</field>
+        </record>
+
+        <!-- Set admin user as super admin -->
+        <record id="base.user_admin" model="res.users">
+            <field name="platform_role">super_admin</field>
+        </record>
+
+        <!-- Default roles for all organizations -->
+        <record id="role_default_grants_manager" model="usbea.platform.role">
+            <field name="name">Grants Manager</field>
+            <field name="description">Full access to grant management, expenses, and compliance reports.</field>
+            <field name="organization_id" ref="base.main_company"/>
+            <field name="sequence">10</field>
+            <field name="can_manage_grants">True</field>
+            <field name="can_manage_expenses">True</field>
+            <field name="can_approve_expenses">True</field>
+            <field name="can_view_financials">True</field>
+            <field name="can_manage_reports">True</field>
+            <field name="can_view_dashboard">True</field>
+            <field name="can_export_data">True</field>
+        </record>
+
+        <record id="role_default_program_coordinator" model="usbea.platform.role">
+            <field name="name">Program Coordinator</field>
+            <field name="description">Manages exchange programs, participants, and events.</field>
+            <field name="organization_id" ref="base.main_company"/>
+            <field name="sequence">20</field>
+            <field name="can_manage_programs">True</field>
+            <field name="can_manage_participants">True</field>
+            <field name="can_manage_events">True</field>
+            <field name="can_view_dashboard">True</field>
+        </record>
+
+        <record id="role_default_finance_officer" model="usbea.platform.role">
+            <field name="name">Finance Officer</field>
+            <field name="description">Manages expenses, approves disbursements, generates financial reports.</field>
+            <field name="organization_id" ref="base.main_company"/>
+            <field name="sequence">30</field>
+            <field name="can_manage_expenses">True</field>
+            <field name="can_approve_expenses">True</field>
+            <field name="can_view_financials">True</field>
+            <field name="can_manage_reports">True</field>
+            <field name="can_export_data">True</field>
+            <field name="can_view_dashboard">True</field>
+        </record>
+
+        <record id="role_default_board_member" model="usbea.platform.role">
+            <field name="name">Board Member</field>
+            <field name="description">Read-only access to dashboards and financial summaries.</field>
+            <field name="organization_id" ref="base.main_company"/>
+            <field name="sequence">40</field>
+            <field name="can_view_financials">True</field>
+            <field name="can_view_dashboard">True</field>
+        </record>
+
+        <record id="role_default_volunteer" model="usbea.platform.role">
+            <field name="name">Volunteer</field>
+            <field name="description">Limited access to program events and participant information.</field>
+            <field name="organization_id" ref="base.main_company"/>
+            <field name="sequence">50</field>
+            <field name="can_manage_events">True</field>
+            <field name="can_view_dashboard">True</field>
+        </record>
+    </data>
+</odoo>

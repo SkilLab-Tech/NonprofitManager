@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Team Directory under USBEA root menu -->
+    <menuitem id="menu_team_directory"
+              name="Team Directory"
+              parent="usbea_rbac.menu_usbea_root"
+              action="action_team_directory"
+              sequence="85"/>
+</odoo>

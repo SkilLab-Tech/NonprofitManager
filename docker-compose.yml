@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: usbea-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-usbea_production}
+      POSTGRES_USER: ${POSTGRES_USER:-odoo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    networks:
+      - usbea-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-odoo} -d ${POSTGRES_DB:-usbea_production}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: usbea-odoo
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${ODOO_PORT:-8069}:8069"
+    volumes:
+      - ./addons/usbea_grants:/mnt/extra-addons/usbea_grants
+      - ./addons/usbea_programs:/mnt/extra-addons/usbea_programs
+      - ./addons/usbea_expenses:/mnt/extra-addons/usbea_expenses
+      - ./addons/usbea_portal:/mnt/extra-addons/usbea_portal
+      - ./addons/usbea_compliance:/mnt/extra-addons/usbea_compliance
+      - odoo-web-data:/var/lib/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf:ro
+    environment:
+      - HOST=db
+      - PORT=5432
+      - USER=${POSTGRES_USER:-odoo}
+      - PASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    networks:
+      - usbea-network
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
+
+networks:
+  usbea-network:
+    driver: bridge

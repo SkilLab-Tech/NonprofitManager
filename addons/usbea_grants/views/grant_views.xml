@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grant Form View -->
+    <record id="view_grant_form" model="ir.ui.view">
+        <field name="name">usbea.grant.form</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <form string="Grant">
+                <header>
+                    <button name="action_submit" string="Submit"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_review" string="Start Review"
+                            type="object" class="btn-primary"
+                            invisible="state != 'submitted'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="btn-primary"
+                            invisible="state != 'under_review'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_activate" string="Activate"
+                            type="object" class="btn-primary"
+                            invisible="state != 'approved'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_reporting" string="Move to Reporting"
+                            type="object"
+                            invisible="state != 'active'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-success"
+                            invisible="state not in ('active', 'reporting')"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_reject" string="Reject"
+                            type="object" class="btn-danger"
+                            invisible="state not in ('submitted', 'under_review')"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('completed', 'cancelled')"
+                            groups="usbea_grants.group_grant_admin"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state not in ('rejected', 'cancelled')"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,under_review,approved,active,reporting,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_expenses" type="object"
+                                class="oe_stat_button" icon="fa-money">
+                            <field name="expense_count" widget="statinfo"
+                                   string="Expenses"/>
+                        </button>
+                        <button name="action_view_disbursements" type="object"
+                                class="oe_stat_button" icon="fa-bank">
+                            <field name="disbursement_count" widget="statinfo"
+                                   string="Disbursements"/>
+                        </button>
+                        <button name="action_view_reports" type="object"
+                                class="oe_stat_button" icon="fa-file-text">
+                            <field name="report_count" widget="statinfo"
+                                   string="Reports"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Grant Name"/>
+                        </h1>
+                        <h2>
+                            <field name="grant_number"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Grant Information">
+                            <field name="grant_type"/>
+                            <field name="funding_source"/>
+                            <field name="responsible_id"/>
+                            <field name="reporting_frequency"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Financial">
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="requested_amount"/>
+                            <field name="approved_amount"/>
+                            <field name="disbursed_amount"/>
+                            <field name="spent_amount"/>
+                            <field name="remaining_amount"/>
+                            <field name="utilization_rate" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dates">
+                            <field name="application_date"/>
+                            <field name="approval_date"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="reporting_deadline"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Budget" name="budget">
+                            <field name="budget_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="planned_amount" sum="Total Planned"/>
+                                    <field name="actual_amount" sum="Total Actual"/>
+                                    <field name="variance" sum="Total Variance"/>
+                                    <field name="variance_pct"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Expenses" name="expenses">
+                            <field name="expense_ids">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="category"/>
+                                    <field name="vendor"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Disbursements" name="disbursements">
+                            <field name="disbursement_ids">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="tranche_number"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="payment_method"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Reports" name="reports">
+                            <field name="report_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="report_type"/>
+                                    <field name="due_date"/>
+                                    <field name="submission_date"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Compliance" name="compliance">
+                            <field name="compliance_requirements"
+                                   placeholder="Enter compliance requirements..."/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"
+                                   placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Grant List/Tree View -->
+    <record id="view_grant_list" model="ir.ui.view">
+        <field name="name">usbea.grant.list</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <list string="Grants" decoration-danger="state == 'rejected'"
+                  decoration-muted="state == 'cancelled'"
+                  decoration-success="state == 'completed'"
+                  multi_edit="1">
+                <field name="grant_number"/>
+                <field name="name"/>
+                <field name="funding_source"/>
+                <field name="grant_type"/>
+                <field name="approved_amount" sum="Total Approved"/>
+                <field name="spent_amount" sum="Total Spent"/>
+                <field name="remaining_amount" sum="Total Remaining"/>
+                <field name="utilization_rate" widget="progressbar"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="reporting_deadline"/>
+                <field name="responsible_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('draft', 'submitted')"
+                       decoration-warning="state in ('under_review', 'reporting')"
+                       decoration-success="state in ('approved', 'active', 'completed')"
+                       decoration-danger="state in ('rejected', 'cancelled')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Grant Kanban View -->
+    <record id="view_grant_kanban" model="ir.ui.view">
+        <field name="name">usbea.grant.kanban</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="grant_number"/>
+                <field name="funding_source"/>
+                <field name="approved_amount"/>
+                <field name="spent_amount"/>
+                <field name="remaining_amount"/>
+                <field name="utilization_rate"/>
+                <field name="state"/>
+                <field name="currency_id"/>
+                <field name="responsible_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_content">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+                            <div class="text-muted">
+                                <field name="grant_number"/>
+                            </div>
+                            <div>
+                                <field name="funding_source"/>
+                            </div>
+                            <div class="mt-2">
+                                <strong>Approved: </strong>
+                                <field name="approved_amount" widget="monetary"/>
+                            </div>
+                            <div>
+                                <strong>Spent: </strong>
+                                <field name="spent_amount" widget="monetary"/>
+                            </div>
+                            <div>
+                                <strong>Remaining: </strong>
+                                <field name="remaining_amount" widget="monetary"/>
+                            </div>
+                            <div class="mt-2">
+                                <field name="utilization_rate" widget="progressbar"/>
+                            </div>
+                            <div class="mt-2">
+                                <field name="responsible_id" widget="many2one_avatar_user"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Grant Calendar View -->
+    <record id="view_grant_calendar" model="ir.ui.view">
+        <field name="name">usbea.grant.calendar</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <calendar string="Grant Deadlines" date_start="start_date"
+                      date_stop="end_date" color="state" mode="month">
+                <field name="name"/>
+                <field name="funding_source"/>
+                <field name="approved_amount"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Grant Pivot View -->
+    <record id="view_grant_pivot" model="ir.ui.view">
+        <field name="name">usbea.grant.pivot</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <pivot string="Grant Analysis">
+                <field name="grant_type" type="row"/>
+                <field name="state" type="col"/>
+                <field name="approved_amount" type="measure"/>
+                <field name="spent_amount" type="measure"/>
+                <field name="remaining_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Grant Graph View -->
+    <record id="view_grant_graph" model="ir.ui.view">
+        <field name="name">usbea.grant.graph</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <graph string="Grant Financials" type="bar">
+                <field name="name"/>
+                <field name="approved_amount" type="measure"/>
+                <field name="spent_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Grant Search View -->
+    <record id="view_grant_search" model="ir.ui.view">
+        <field name="name">usbea.grant.search</field>
+        <field name="model">usbea.grant</field>
+        <field name="arch" type="xml">
+            <search string="Search Grants">
+                <field name="name"/>
+                <field name="grant_number"/>
+                <field name="funding_source"/>
+                <field name="responsible_id"/>
+                <filter string="My Grants" name="my_grants"
+                        domain="[('responsible_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Draft" name="draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Active" name="active"
+                        domain="[('state', '=', 'active')]"/>
+                <filter string="Reporting Due" name="reporting"
+                        domain="[('state', '=', 'reporting')]"/>
+                <filter string="Completed" name="completed"
+                        domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter string="Government" name="government"
+                        domain="[('grant_type', '=', 'government')]"/>
+                <filter string="Foundation" name="foundation"
+                        domain="[('grant_type', '=', 'foundation')]"/>
+                <filter string="Corporate" name="corporate"
+                        domain="[('grant_type', '=', 'corporate')]"/>
+                <separator/>
+                <filter string="Report Due This Month" name="report_due_month"
+                        domain="[('reporting_deadline', '&gt;=', (context_today()).strftime('%Y-%m-01')),
+                                 ('reporting_deadline', '&lt;', (context_today() + relativedelta(months=1)).strftime('%Y-%m-01'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Grant Type" name="group_type"
+                            context="{'group_by': 'grant_type'}"/>
+                    <filter string="Funder" name="group_funder"
+                            context="{'group_by': 'funding_source'}"/>
+                    <filter string="Manager" name="group_manager"
+                            context="{'group_by': 'responsible_id'}"/>
+                    <filter string="Application Date" name="group_date"
+                            context="{'group_by': 'application_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Grant Action -->
+    <record id="action_grant" model="ir.actions.act_window">
+        <field name="name">Grants</field>
+        <field name="res_model">usbea.grant</field>
+        <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="view_grant_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first grant
+            </p>
+            <p>
+                Track grants from application through completion.
+                Monitor budgets, expenses, and compliance deadlines.
+            </p>
+        </field>
+    </record>
+</odoo>

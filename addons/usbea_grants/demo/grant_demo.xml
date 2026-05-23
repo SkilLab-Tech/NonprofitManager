@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Funding Organizations -->
+        <record id="partner_us_state_dept" model="res.partner">
+            <field name="name">U.S. Department of State</field>
+            <field name="is_company">True</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+        <record id="partner_fulbright" model="res.partner">
+            <field name="name">Fulbright Commission Brazil</field>
+            <field name="is_company">True</field>
+            <field name="country_id" ref="base.br"/>
+        </record>
+        <record id="partner_ford_foundation" model="res.partner">
+            <field name="name">Ford Foundation</field>
+            <field name="is_company">True</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+        <record id="partner_itau" model="res.partner">
+            <field name="name">Itau Cultural Foundation</field>
+            <field name="is_company">True</field>
+            <field name="country_id" ref="base.br"/>
+        </record>
+        <record id="partner_google_org" model="res.partner">
+            <field name="name">Google.org</field>
+            <field name="is_company">True</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+
+        <!-- Grant 1: Active government grant -->
+        <record id="grant_state_dept_2025" model="usbea.grant">
+            <field name="name">Cultural Exchange Program FY2025</field>
+            <field name="grant_type">government</field>
+            <field name="funding_source" ref="partner_us_state_dept"/>
+            <field name="requested_amount">150000.00</field>
+            <field name="approved_amount">125000.00</field>
+            <field name="application_date">2024-09-15</field>
+            <field name="approval_date">2024-11-01</field>
+            <field name="start_date">2025-01-01</field>
+            <field name="end_date">2025-12-31</field>
+            <field name="reporting_deadline">2025-04-01</field>
+            <field name="reporting_frequency">quarterly</field>
+            <field name="state">active</field>
+            <field name="description">&lt;p&gt;Annual cultural exchange program between US and Brazilian universities. Supports 50 participants in academic and professional exchanges.&lt;/p&gt;</field>
+            <field name="compliance_requirements">&lt;p&gt;Quarterly narrative and financial reports. Final closeout report within 90 days of program end. All expenses must follow 2 CFR 200 guidelines.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Budget lines for Grant 1 -->
+        <record id="budget_g1_travel" model="usbea.grant.budget">
+            <field name="name">International Travel</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="planned_amount">45000.00</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="budget_g1_accommodation" model="usbea.grant.budget">
+            <field name="name">Accommodation</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="planned_amount">30000.00</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="budget_g1_staff" model="usbea.grant.budget">
+            <field name="name">Staff Costs</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="planned_amount">25000.00</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="budget_g1_materials" model="usbea.grant.budget">
+            <field name="name">Program Materials</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="planned_amount">15000.00</field>
+            <field name="sequence">4</field>
+        </record>
+        <record id="budget_g1_admin" model="usbea.grant.budget">
+            <field name="name">Administrative (10%)</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="planned_amount">10000.00</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <!-- Disbursements for Grant 1 -->
+        <record id="disb_g1_1" model="usbea.grant.disbursement">
+            <field name="name">First Tranche - Q1</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-01-15</field>
+            <field name="amount">50000.00</field>
+            <field name="tranche_number">1</field>
+            <field name="payment_method">wire</field>
+            <field name="payment_reference">WIRE-2025-0115-001</field>
+            <field name="state">confirmed</field>
+        </record>
+        <record id="disb_g1_2" model="usbea.grant.disbursement">
+            <field name="name">Second Tranche - Q2</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-04-01</field>
+            <field name="amount">37500.00</field>
+            <field name="tranche_number">2</field>
+            <field name="payment_method">wire</field>
+            <field name="state">pending</field>
+        </record>
+
+        <!-- Expenses for Grant 1 -->
+        <record id="exp_g1_1" model="usbea.grant.expense">
+            <field name="name">Flight tickets - Cohort 1 (10 participants)</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-01-20</field>
+            <field name="amount">18500.00</field>
+            <field name="category">travel</field>
+            <field name="budget_line_id" ref="budget_g1_travel"/>
+            <field name="vendor">LATAM Airlines</field>
+            <field name="reference">INV-LATAM-2025-0120</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g1_2" model="usbea.grant.expense">
+            <field name="name">Hotel accommodation - Cohort 1 (2 weeks)</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-02-01</field>
+            <field name="amount">8400.00</field>
+            <field name="category">accommodation</field>
+            <field name="budget_line_id" ref="budget_g1_accommodation"/>
+            <field name="vendor">Marriott Hotels</field>
+            <field name="reference">INV-MARR-2025-0201</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g1_3" model="usbea.grant.expense">
+            <field name="name">Program coordinator salary - January</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-01-31</field>
+            <field name="amount">4200.00</field>
+            <field name="category">staff</field>
+            <field name="budget_line_id" ref="budget_g1_staff"/>
+            <field name="vendor">USBEA Brasil</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g1_4" model="usbea.grant.expense">
+            <field name="name">Program coordinator salary - February</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-02-28</field>
+            <field name="amount">4200.00</field>
+            <field name="category">staff</field>
+            <field name="budget_line_id" ref="budget_g1_staff"/>
+            <field name="vendor">USBEA Brasil</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g1_5" model="usbea.grant.expense">
+            <field name="name">Training materials and workbooks</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-01-25</field>
+            <field name="amount">2300.00</field>
+            <field name="category">materials</field>
+            <field name="budget_line_id" ref="budget_g1_materials"/>
+            <field name="vendor">Grafica Express</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g1_6" model="usbea.grant.expense">
+            <field name="name">Office supplies and printing</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-02-15</field>
+            <field name="amount">450.00</field>
+            <field name="category">admin</field>
+            <field name="budget_line_id" ref="budget_g1_admin"/>
+            <field name="vendor">Kalunga</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g1_7" model="usbea.grant.expense">
+            <field name="name">Venue rental - Welcome orientation</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="date">2025-02-05</field>
+            <field name="amount">1200.00</field>
+            <field name="category">other</field>
+            <field name="vendor">Hotel Unique Sao Paulo</field>
+            <field name="state">submitted</field>
+        </record>
+
+        <!-- Reports for Grant 1 -->
+        <record id="report_g1_q1" model="usbea.grant.report">
+            <field name="name">Q1 2025 Narrative and Financial Report</field>
+            <field name="grant_id" ref="grant_state_dept_2025"/>
+            <field name="report_type">narrative</field>
+            <field name="due_date">2025-04-15</field>
+            <field name="period_start">2025-01-01</field>
+            <field name="period_end">2025-03-31</field>
+            <field name="state">in_progress</field>
+        </record>
+
+        <!-- Grant 2: Foundation grant in approval -->
+        <record id="grant_ford_leadership" model="usbea.grant">
+            <field name="name">Alumni Leadership Development Initiative</field>
+            <field name="grant_type">foundation</field>
+            <field name="funding_source" ref="partner_ford_foundation"/>
+            <field name="requested_amount">75000.00</field>
+            <field name="approved_amount">60000.00</field>
+            <field name="application_date">2025-01-10</field>
+            <field name="approval_date">2025-02-20</field>
+            <field name="start_date">2025-03-01</field>
+            <field name="end_date">2026-02-28</field>
+            <field name="reporting_frequency">biannual</field>
+            <field name="state">approved</field>
+            <field name="description">&lt;p&gt;Leadership development program for USBEA alumni, including mentorship, workshops, and community projects.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Budget for Grant 2 -->
+        <record id="budget_g2_workshops" model="usbea.grant.budget">
+            <field name="name">Workshop Costs</field>
+            <field name="grant_id" ref="grant_ford_leadership"/>
+            <field name="planned_amount">20000.00</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="budget_g2_mentorship" model="usbea.grant.budget">
+            <field name="name">Mentorship Program</field>
+            <field name="grant_id" ref="grant_ford_leadership"/>
+            <field name="planned_amount">15000.00</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="budget_g2_community" model="usbea.grant.budget">
+            <field name="name">Community Projects</field>
+            <field name="grant_id" ref="grant_ford_leadership"/>
+            <field name="planned_amount">18000.00</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="budget_g2_admin" model="usbea.grant.budget">
+            <field name="name">Administration</field>
+            <field name="grant_id" ref="grant_ford_leadership"/>
+            <field name="planned_amount">7000.00</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <!-- Grant 3: Corporate grant - draft -->
+        <record id="grant_google_tech" model="usbea.grant">
+            <field name="name">Tech Skills for Exchange Alumni</field>
+            <field name="grant_type">corporate</field>
+            <field name="funding_source" ref="partner_google_org"/>
+            <field name="requested_amount">200000.00</field>
+            <field name="application_date">2025-02-01</field>
+            <field name="state">submitted</field>
+            <field name="description">&lt;p&gt;Technology skills training program for 200 alumni, including coding bootcamp, cloud computing certifications, and AI/ML workshops.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Grant 4: Local corporate -->
+        <record id="grant_itau_culture" model="usbea.grant">
+            <field name="name">Cultural Bridge Festival 2025</field>
+            <field name="grant_type">corporate</field>
+            <field name="funding_source" ref="partner_itau"/>
+            <field name="requested_amount">50000.00</field>
+            <field name="approved_amount">45000.00</field>
+            <field name="application_date">2024-10-15</field>
+            <field name="approval_date">2024-12-01</field>
+            <field name="start_date">2025-05-01</field>
+            <field name="end_date">2025-08-31</field>
+            <field name="reporting_frequency">monthly</field>
+            <field name="state">active</field>
+            <field name="description">&lt;p&gt;Annual cultural festival celebrating US-Brazil cultural exchange, featuring art exhibitions, music performances, and panel discussions.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Budget for Grant 4 -->
+        <record id="budget_g4_venue" model="usbea.grant.budget">
+            <field name="name">Venue and Equipment</field>
+            <field name="grant_id" ref="grant_itau_culture"/>
+            <field name="planned_amount">15000.00</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="budget_g4_artists" model="usbea.grant.budget">
+            <field name="name">Artist Fees and Travel</field>
+            <field name="grant_id" ref="grant_itau_culture"/>
+            <field name="planned_amount">18000.00</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="budget_g4_marketing" model="usbea.grant.budget">
+            <field name="name">Marketing and Promotion</field>
+            <field name="grant_id" ref="grant_itau_culture"/>
+            <field name="planned_amount">8000.00</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="budget_g4_admin" model="usbea.grant.budget">
+            <field name="name">Administration</field>
+            <field name="grant_id" ref="grant_itau_culture"/>
+            <field name="planned_amount">4000.00</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <!-- Expenses for Grant 4 -->
+        <record id="exp_g4_1" model="usbea.grant.expense">
+            <field name="name">Venue deposit - MASP</field>
+            <field name="grant_id" ref="grant_itau_culture"/>
+            <field name="date">2025-02-01</field>
+            <field name="amount">5000.00</field>
+            <field name="category">other</field>
+            <field name="budget_line_id" ref="budget_g4_venue"/>
+            <field name="vendor">MASP - Museu de Arte de Sao Paulo</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g4_2" model="usbea.grant.expense">
+            <field name="name">Social media campaign - Phase 1</field>
+            <field name="grant_id" ref="grant_itau_culture"/>
+            <field name="date">2025-02-15</field>
+            <field name="amount">2500.00</field>
+            <field name="category">marketing</field>
+            <field name="budget_line_id" ref="budget_g4_marketing"/>
+            <field name="vendor">Agencia Digital SP</field>
+            <field name="state">approved</field>
+        </record>
+
+        <!-- Grant 5: Fulbright partnership -->
+        <record id="grant_fulbright_2025" model="usbea.grant">
+            <field name="name">Fulbright Alumni Engagement Program</field>
+            <field name="grant_type">government</field>
+            <field name="funding_source" ref="partner_fulbright"/>
+            <field name="requested_amount">90000.00</field>
+            <field name="approved_amount">85000.00</field>
+            <field name="application_date">2024-08-01</field>
+            <field name="approval_date">2024-10-15</field>
+            <field name="start_date">2025-01-15</field>
+            <field name="end_date">2025-12-15</field>
+            <field name="reporting_deadline">2025-07-15</field>
+            <field name="reporting_frequency">biannual</field>
+            <field name="state">active</field>
+            <field name="description">&lt;p&gt;Supporting ongoing engagement of Fulbright alumni through networking events, professional development, and community service projects across Brazil.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Budget for Grant 5 -->
+        <record id="budget_g5_events" model="usbea.grant.budget">
+            <field name="name">Networking Events</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="planned_amount">25000.00</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="budget_g5_profdev" model="usbea.grant.budget">
+            <field name="name">Professional Development</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="planned_amount">30000.00</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="budget_g5_community" model="usbea.grant.budget">
+            <field name="name">Community Service</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="planned_amount">20000.00</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="budget_g5_admin" model="usbea.grant.budget">
+            <field name="name">Administration</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="planned_amount">10000.00</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <!-- Expenses for Grant 5 -->
+        <record id="exp_g5_1" model="usbea.grant.expense">
+            <field name="name">Alumni networking dinner - SP Chapter</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="date">2025-01-25</field>
+            <field name="amount">3200.00</field>
+            <field name="category">other</field>
+            <field name="budget_line_id" ref="budget_g5_events"/>
+            <field name="vendor">Restaurante Fasano</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g5_2" model="usbea.grant.expense">
+            <field name="name">Workshop facilitator - Leadership series</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="date">2025-02-10</field>
+            <field name="amount">5000.00</field>
+            <field name="category">staff</field>
+            <field name="budget_line_id" ref="budget_g5_profdev"/>
+            <field name="vendor">Dr. Maria Santos - Consultant</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="exp_g5_3" model="usbea.grant.expense">
+            <field name="name">Community garden project supplies</field>
+            <field name="grant_id" ref="grant_fulbright_2025"/>
+            <field name="date">2025-02-20</field>
+            <field name="amount">1800.00</field>
+            <field name="category">materials</field>
+            <field name="budget_line_id" ref="budget_g5_community"/>
+            <field name="vendor">Leroy Merlin</field>
+            <field name="state">submitted</field>
+        </record>
+
+        <!-- Grant 6: Completed grant -->
+        <record id="grant_completed_2024" model="usbea.grant">
+            <field name="name">Digital Literacy Program 2024</field>
+            <field name="grant_type">foundation</field>
+            <field name="funding_source" ref="partner_ford_foundation"/>
+            <field name="requested_amount">40000.00</field>
+            <field name="approved_amount">40000.00</field>
+            <field name="application_date">2023-11-01</field>
+            <field name="approval_date">2024-01-15</field>
+            <field name="start_date">2024-02-01</field>
+            <field name="end_date">2024-12-31</field>
+            <field name="state">completed</field>
+            <field name="description">&lt;p&gt;Digital literacy and technology training for 150 alumni across 5 Brazilian cities.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Grant 7: Rejected grant -->
+        <record id="grant_rejected" model="usbea.grant">
+            <field name="name">Entrepreneurship Incubator Pilot</field>
+            <field name="grant_type">corporate</field>
+            <field name="funding_source" ref="partner_google_org"/>
+            <field name="requested_amount">300000.00</field>
+            <field name="application_date">2024-06-01</field>
+            <field name="state">rejected</field>
+            <field name="description">&lt;p&gt;Startup incubator for alumni entrepreneurs. Rejected due to scope concerns.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Grant 8: Draft -->
+        <record id="grant_draft_scholarship" model="usbea.grant">
+            <field name="name">Graduate Scholarship Fund 2026</field>
+            <field name="grant_type">government</field>
+            <field name="funding_source" ref="partner_us_state_dept"/>
+            <field name="requested_amount">250000.00</field>
+            <field name="state">draft</field>
+            <field name="description">&lt;p&gt;Scholarship fund for alumni pursuing graduate studies in the US. Targeting 25 full scholarships.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Grant 9: Under review -->
+        <record id="grant_under_review" model="usbea.grant">
+            <field name="name">Climate Action Alumni Network</field>
+            <field name="grant_type">foundation</field>
+            <field name="funding_source" ref="partner_ford_foundation"/>
+            <field name="requested_amount">65000.00</field>
+            <field name="application_date">2025-01-20</field>
+            <field name="state">under_review</field>
+            <field name="description">&lt;p&gt;Building a network of alumni working on climate action across Brazil, with regional hubs and joint projects.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Grant 10: Another active grant -->
+        <record id="grant_individual_mentor" model="usbea.grant">
+            <field name="name">Executive Mentorship Endowment</field>
+            <field name="grant_type">individual</field>
+            <field name="requested_amount">100000.00</field>
+            <field name="approved_amount">100000.00</field>
+            <field name="application_date">2024-05-01</field>
+            <field name="approval_date">2024-07-01</field>
+            <field name="start_date">2024-08-01</field>
+            <field name="end_date">2026-07-31</field>
+            <field name="reporting_frequency">annual</field>
+            <field name="reporting_deadline">2025-08-01</field>
+            <field name="state">active</field>
+            <field name="description">&lt;p&gt;Endowment from a prominent alumni donor to fund executive mentorship matching between senior US executives and Brazilian alumni.&lt;/p&gt;</field>
+        </record>
+    </data>
+</odoo>

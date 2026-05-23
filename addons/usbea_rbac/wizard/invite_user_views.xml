@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_invite_user_wizard_form" model="ir.ui.view">
+        <field name="name">usbea.invite.user.wizard.form</field>
+        <field name="model">usbea.invite.user.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Invite User">
+                <group>
+                    <group string="User Details">
+                        <field name="name" placeholder="John Smith"/>
+                        <field name="email" placeholder="user@example.com"/>
+                    </group>
+                    <group string="Access">
+                        <field name="organization_id"
+                               groups="usbea_rbac.group_platform_super_admin"/>
+                        <field name="platform_role"/>
+                        <field name="role_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <group string="Personal Message">
+                    <field name="message" nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="action_send_invitation" string="Send Invitation"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_invite_user_wizard" model="ir.actions.act_window">
+        <field name="name">Invite User</field>
+        <field name="res_model">usbea.invite.user.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>

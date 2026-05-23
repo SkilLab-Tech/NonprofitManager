@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grant Report Form View -->
+    <record id="view_grant_report_form" model="ir.ui.view">
+        <field name="name">usbea.grant.report.form</field>
+        <field name="model">usbea.grant.report</field>
+        <field name="arch" type="xml">
+            <form string="Compliance Report">
+                <header>
+                    <button name="action_start" string="Start Writing"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_submit_review" string="Submit for Review"
+                            type="object" class="btn-primary"
+                            invisible="state not in ('in_progress', 'revision')"/>
+                    <button name="action_submit_funder" string="Submit to Funder"
+                            type="object" class="btn-primary"
+                            invisible="state != 'review'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_accept" string="Mark Accepted"
+                            type="object" class="btn-success"
+                            invisible="state != 'submitted'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_request_revision" string="Request Revision"
+                            type="object" class="btn-warning"
+                            invisible="state != 'submitted'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_progress,review,submitted,accepted"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Report Details">
+                            <field name="name"/>
+                            <field name="grant_id"/>
+                            <field name="report_type"/>
+                            <field name="due_date"/>
+                            <field name="submission_date"/>
+                        </group>
+                        <group string="Reporting Period">
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                            <field name="reviewer_id"/>
+                            <field name="submitted_by"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Narrative" name="narrative">
+                            <field name="narrative"
+                                   placeholder="Enter narrative report content..."/>
+                        </page>
+                        <page string="Financial Summary" name="financial">
+                            <field name="financial_summary"
+                                   placeholder="Enter financial summary..."/>
+                        </page>
+                        <page string="Impact Metrics" name="impact">
+                            <field name="impact_metrics"
+                                   placeholder="Enter impact metrics and outcomes..."/>
+                        </page>
+                        <page string="Funder Feedback" name="feedback">
+                            <field name="funder_feedback"
+                                   placeholder="Feedback from funder..."/>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachments"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Grant Report List View -->
+    <record id="view_grant_report_list" model="ir.ui.view">
+        <field name="name">usbea.grant.report.list</field>
+        <field name="model">usbea.grant.report</field>
+        <field name="arch" type="xml">
+            <list string="Compliance Reports"
+                  decoration-danger="state == 'revision'"
+                  decoration-success="state == 'accepted'">
+                <field name="name"/>
+                <field name="grant_id"/>
+                <field name="report_type"/>
+                <field name="due_date"/>
+                <field name="submission_date"/>
+                <field name="reviewer_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('draft', 'in_progress')"
+                       decoration-warning="state in ('review', 'submitted')"
+                       decoration-success="state == 'accepted'"
+                       decoration-danger="state == 'revision'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Grant Report Search View -->
+    <record id="view_grant_report_search" model="ir.ui.view">
+        <field name="name">usbea.grant.report.search</field>
+        <field name="model">usbea.grant.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Reports">
+                <field name="name"/>
+                <field name="grant_id"/>
+                <filter string="Due This Month" name="due_month"
+                        domain="[('due_date', '&gt;=', (context_today()).strftime('%Y-%m-01')),
+                                 ('due_date', '&lt;', (context_today() + relativedelta(months=1)).strftime('%Y-%m-01'))]"/>
+                <filter string="Overdue" name="overdue"
+                        domain="[('due_date', '&lt;', context_today().strftime('%Y-%m-%d')),
+                                 ('state', 'not in', ('submitted', 'accepted'))]"/>
+                <filter string="Needs Revision" name="revision"
+                        domain="[('state', '=', 'revision')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Grant" name="group_grant"
+                            context="{'group_by': 'grant_id'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'report_type'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Grant Report Action -->
+    <record id="action_grant_report" model="ir.actions.act_window">
+        <field name="name">Compliance Reports</field>
+        <field name="res_model">usbea.grant.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_grant_report_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a compliance report
+            </p>
+            <p>
+                Generate and track reports required by funders.
+            </p>
+        </field>
+    </record>
+</odoo>

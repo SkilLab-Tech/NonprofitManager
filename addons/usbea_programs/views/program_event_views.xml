@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Program Event Form View -->
+    <record id="view_event_form" model="ir.ui.view">
+        <field name="name">usbea.program.event.form</field>
+        <field name="model">usbea.program.event</field>
+        <field name="arch" type="xml">
+            <form string="Program Event">
+                <header>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-primary"
+                            invisible="state != 'planned'"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-success"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('completed', 'cancelled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="planned,confirmed,completed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="program_id"/>
+                            <field name="event_type"/>
+                            <field name="location"/>
+                            <field name="max_attendees"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Attendees" name="attendees">
+                            <field name="attendee_ids"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Program Event List View -->
+    <record id="view_event_list" model="ir.ui.view">
+        <field name="name">usbea.program.event.list</field>
+        <field name="model">usbea.program.event</field>
+        <field name="arch" type="xml">
+            <list string="Events">
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="event_type"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="location"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'planned'"
+                       decoration-success="state in ('confirmed', 'completed')"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Program Event Calendar View -->
+    <record id="view_event_calendar" model="ir.ui.view">
+        <field name="name">usbea.program.event.calendar</field>
+        <field name="model">usbea.program.event</field>
+        <field name="arch" type="xml">
+            <calendar string="Events" date_start="date_start"
+                      date_stop="date_end" color="program_id" mode="month">
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="location"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Program Event Action -->
+    <record id="action_event" model="ir.actions.act_window">
+        <field name="name">Program Events</field>
+        <field name="res_model">usbea.program.event</field>
+        <field name="view_mode">list,form,calendar</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule a program event
+            </p>
+        </field>
+    </record>
+</odoo>
