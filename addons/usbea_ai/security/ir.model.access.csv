@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_usbea_ai_prompt_template_user,usbea.ai.prompt_template.user,model_usbea_ai_prompt_template,group_usbea_ai_user,1,0,0,0
+access_usbea_ai_prompt_template_manager,usbea.ai.prompt_template.manager,model_usbea_ai_prompt_template,group_usbea_ai_manager,1,1,1,1
+access_usbea_ai_suggestion_user,usbea.ai.suggestion.user,model_usbea_ai_suggestion,group_usbea_ai_user,1,1,1,0
+access_usbea_ai_suggestion_manager,usbea.ai.suggestion.manager,model_usbea_ai_suggestion,group_usbea_ai_manager,1,1,1,1

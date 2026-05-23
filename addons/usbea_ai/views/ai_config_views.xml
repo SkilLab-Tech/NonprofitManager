@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_usbea_ai_config_settings" model="ir.ui.view">
+        <field name="name">usbea.ai.config.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="USBEA AI" string="USBEA AI" name="usbea_ai" groups="usbea_ai.group_usbea_ai_manager">
+                    <block title="Anthropic Provider" name="usbea_ai_provider">
+                        <setting id="usbea_ai_api_key_setting" help="Your Anthropic API key. Required to enable AI features.">
+                            <field name="usbea_ai_api_key" password="True"/>
+                        </setting>
+                        <setting id="usbea_ai_default_model_setting" help="Override the per-template tier default with a specific model ID.">
+                            <field name="usbea_ai_default_model" placeholder="claude-sonnet-4-6"/>
+                        </setting>
+                        <setting id="usbea_ai_retry_setting">
+                            <field name="usbea_ai_retry_attempts"/>
+                        </setting>
+                    </block>
+                    <block title="Cache &amp; Performance" name="usbea_ai_cache">
+                        <setting id="usbea_ai_cache_ttl_setting">
+                            <field name="usbea_ai_cache_ttl_seconds"/>
+                        </setting>
+                        <setting id="usbea_ai_cache_max_setting">
+                            <field name="usbea_ai_cache_max_entries"/>
+                        </setting>
+                    </block>
+                    <block title="LGPD &amp; Audit" name="usbea_ai_lgpd">
+                        <setting id="usbea_ai_redaction_setting" help="Strip Brazilian PII (CPF, CNPJ, PIX keys, etc.) from prompts before they leave Brazil. Mandatory unless you have documented an alternative lawful basis under LGPD Art. 33.">
+                            <field name="usbea_ai_redaction_enabled"/>
+                        </setting>
+                        <setting id="usbea_ai_audit_retention_setting" help="How long to keep AI suggestion audit log entries (days).">
+                            <field name="usbea_ai_audit_retention_days"/>
+                        </setting>
+                    </block>
+                    <block title="Budget" name="usbea_ai_budget">
+                        <setting id="usbea_ai_budget_setting" help="Monthly token budget per company. 0 = unlimited. Hard cap — exceeding raises AIBudgetExceededError.">
+                            <field name="usbea_ai_monthly_token_budget"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_usbea_ai_config_settings" model="ir.actions.act_window">
+        <field name="name">USBEA AI Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'usbea_ai'}</field>
+    </record>
+
+</odoo>

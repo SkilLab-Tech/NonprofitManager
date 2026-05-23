@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_usbea_ai_prompt_template_list" model="ir.ui.view">
+        <field name="name">usbea.ai.prompt_template.list</field>
+        <field name="model">usbea.ai.prompt_template</field>
+        <field name="arch" type="xml">
+            <list string="AI Prompt Templates">
+                <field name="name"/>
+                <field name="technical_key"/>
+                <field name="tier"/>
+                <field name="locale"/>
+                <field name="max_tokens"/>
+                <field name="temperature"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_usbea_ai_prompt_template_form" model="ir.ui.view">
+        <field name="name">usbea.ai.prompt_template.form</field>
+        <field name="model">usbea.ai.prompt_template</field>
+        <field name="arch" type="xml">
+            <form string="AI Prompt Template">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="technical_key" placeholder="snake_case_key"/>
+                            <field name="tier"/>
+                            <field name="model_preference" placeholder="claude-sonnet-4-6 (optional override)"/>
+                            <field name="locale"/>
+                        </group>
+                        <group>
+                            <field name="max_tokens"/>
+                            <field name="temperature"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="System prompt">
+                            <field name="system_prompt" widget="text" placeholder="High-quality system message — sets persona, constraints, output format..."/>
+                        </page>
+                        <page string="User prompt template">
+                            <field name="user_prompt_template" widget="text" placeholder="User-side body with {{variable}} placeholders."/>
+                            <div class="text-muted mt8">
+                                Placeholders use <code>{{variable}}</code> syntax (simple substitution — no code execution).
+                                Missing variables raise a validation error at call time.
+                            </div>
+                        </page>
+                        <page string="Description">
+                            <field name="description" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_usbea_ai_prompt_template" model="ir.actions.act_window">
+        <field name="name">Prompt Templates</field>
+        <field name="res_model">usbea.ai.prompt_template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
