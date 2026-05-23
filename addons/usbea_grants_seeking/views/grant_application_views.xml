@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_grant_application_kanban" model="ir.ui.view">
+        <field name="name">usbea.grant_application.kanban</field>
+        <field name="model">usbea.grant_application</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="funder_id"/>
+                <field name="program_id"/>
+                <field name="requested_amount"/>
+                <field name="deadline"/>
+                <field name="fit_score_ai"/>
+                <field name="assigned_writer_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="funder_id"/></div>
+                            <div>Program: <field name="program_id"/></div>
+                            <div>Ask: <field name="requested_amount"/></div>
+                            <div>Due: <field name="deadline"/></div>
+                            <div>Fit: <field name="fit_score_ai"/>%</div>
+                            <div>Writer: <field name="assigned_writer_id"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_grant_application_list" model="ir.ui.view">
+        <field name="name">usbea.grant_application.list</field>
+        <field name="model">usbea.grant_application</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'awarded'" decoration-danger="state == 'declined'" decoration-muted="state == 'withdrawn'">
+                <field name="name"/>
+                <field name="funder_id"/>
+                <field name="program_id"/>
+                <field name="state"/>
+                <field name="requested_amount"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="deadline"/>
+                <field name="fit_score_ai"/>
+                <field name="latest_draft_version_num"/>
+                <field name="assigned_writer_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_grant_application_form" model="ir.ui.view">
+        <field name="name">usbea.grant_application.form</field>
+        <field name="model">usbea.grant_application</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_research" type="object" string="Move to researching" invisible="state != 'prospect'" class="btn-secondary"/>
+                    <button name="action_draft" type="object" string="Start drafting" invisible="state not in ('researching', 'prospect')" class="btn-primary"/>
+                    <button name="action_submit" type="object" string="Submit" invisible="state != 'drafting'" class="btn-primary"/>
+                    <button name="action_under_review" type="object" string="Mark under review" invisible="state != 'submitted'"/>
+                    <button name="action_award" type="object" string="Mark awarded" invisible="state != 'under_review'" class="btn-success" groups="usbea_grants_seeking.group_grants_seeking_manager"/>
+                    <button name="action_decline" type="object" string="Mark declined" invisible="state != 'under_review'" groups="usbea_grants_seeking.group_grants_seeking_manager"/>
+                    <button name="action_withdraw" type="object" string="Withdraw" invisible="state in ('awarded', 'declined', 'withdrawn')"/>
+                    <button name="action_generate_draft" type="object" string="AI: generate draft section" class="btn-info" invisible="state in ('awarded', 'declined', 'withdrawn')" groups="usbea_ai.group_usbea_ai_user"/>
+                    <button name="action_refresh_fit_score" type="object" string="AI: refresh fit score" groups="usbea_ai.group_usbea_ai_user"/>
+                    <field name="state" widget="statusbar" statusbar_visible="prospect,researching,drafting,submitted,under_review,awarded"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="funder_id"/>
+                            <field name="program_id"/>
+                            <field name="requested_amount"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <field name="deadline"/>
+                            <field name="submitted_at" readonly="1"/>
+                            <field name="decision_at" readonly="1"/>
+                            <field name="assigned_writer_id"/>
+                            <field name="fit_score_ai" readonly="1"/>
+                            <field name="awarded_grant_id" readonly="1" invisible="state != 'awarded'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Latest draft">
+                            <field name="latest_draft_text" readonly="1" widget="text"/>
+                            <p class="text-muted">Use <em>AI: generate draft section</em> to add a new version. Versions are append-only.</p>
+                        </page>
+                        <page string="Draft versions">
+                            <field name="draft_version_ids">
+                                <list>
+                                    <field name="version_num"/>
+                                    <field name="section"/>
+                                    <field name="ai_assisted" widget="boolean_toggle"/>
+                                    <field name="created_by"/>
+                                    <field name="create_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Comments">
+                            <field name="comment_ids">
+                                <list editable="bottom">
+                                    <field name="create_date"/>
+                                    <field name="author_id"/>
+                                    <field name="on_section"/>
+                                    <field name="body"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Decision notes" invisible="state not in ('awarded', 'declined')">
+                            <field name="decision_notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_grant_application" model="ir.actions.act_window">
+        <field name="name">Grant Applications</field>
+        <field name="res_model">usbea.grant_application</field>
+        <field name="view_mode">kanban,list,form,calendar</field>
+    </record>
+</odoo>

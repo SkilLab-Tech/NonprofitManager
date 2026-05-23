@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_form_funder" model="ir.ui.view">
+        <field name="name">res.partner.form.funder</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Funder" groups="usbea_grants_seeking.group_grants_seeking_user"
+                      invisible="usbea_archetype != 'funder'">
+                    <group>
+                        <group>
+                            <field name="funder_type"/>
+                            <field name="funder_focus_areas"/>
+                            <field name="funder_application_seasons"/>
+                            <field name="funder_application_url" widget="url"/>
+                        </group>
+                        <group>
+                            <field name="funder_typical_min_brl"/>
+                            <field name="funder_typical_max_brl"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="funder_application_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="funder_notes"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_funder_list" model="ir.actions.act_window">
+        <field name="name">Funders</field>
+        <field name="res_model">res.partner</field>
+        <field name="domain">[('funder_type', '!=', False)]</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'default_funder_type': 'foundation', 'default_is_company': True, 'default_usbea_archetype': 'funder'}</field>
+    </record>
+</odoo>

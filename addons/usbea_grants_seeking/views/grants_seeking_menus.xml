@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_grants_seeking_root"
+              name="USBEA Grant Seeking"
+              sequence="65"
+              groups="usbea_grants_seeking.group_grants_seeking_user"
+              web_icon="usbea_grants_seeking,static/description/icon.png"/>
+
+    <menuitem id="menu_grants_seeking_pipeline"
+              name="Pipeline"
+              parent="menu_grants_seeking_root"
+              action="action_grant_application"
+              sequence="10"/>
+
+    <menuitem id="menu_grants_seeking_funders"
+              name="Funders"
+              parent="menu_grants_seeking_root"
+              action="action_funder_list"
+              sequence="20"/>
+</odoo>
