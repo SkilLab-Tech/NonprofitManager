@@ -1,9 +1,26 @@
-# USBEA Nonprofit OS
+# USBEA Nonprofit OS — Documentation Spec (archived stack)
 
-**A Brazilian-first back-office Nonprofit Operating System for alumni-driven NGOs.** Built on Odoo 19.0 (LGPL-3) with custom `usbea_*` modules and selective [OCA](https://github.com/OCA) extensions.
+> ## ⚠️ This repo is a documentation-only spec reference.
+>
+> **New work happens in [`SkilLab-Tech/USBEA-Digital`](https://github.com/SkilLab-Tech/USBEA-Digital)** — the pnpm + Turborepo monorepo whose `apps/gestao/` Next.js app is live at **[`gestao.usbeabrasil.org`](https://gestao.usbeabrasil.org)** and is the canonical back-office surface for USBEA Brasil.
+>
+> The Odoo 19.0 modules in this repo are **not deployed** and **should not be deployed**. They served as a back-office architecture exploration; the resulting domain models, state machines, LGPD/MROSC/OSCIP compliance specs, AI prompt templates, and pure-Python utilities are being ported to TypeScript in the monorepo (see `usbea-digital`'s recovery tracker).
+>
+> **Original hostname `manage.usbeabrasil.org` already 301-redirects to `gestao.usbeabrasil.org`** at the Caddy layer — no DNS/proxy work needed.
 
-**Deployed at:** [`manage.usbeabrasil.org`](https://manage.usbeabrasil.org)
-**Repo:** `SkilLab-Tech/NonprofitManager`
+---
+
+## What's in this repo (spec reference)
+
+A Brazilian-first back-office Nonprofit Operating System spec, expressed as Odoo 19.0 modules. The 13 custom `usbea_*` addons document:
+
+- **5-pillar architecture** — Project/Task Ops · CRM · Grant Seeking · Programs/Impact · Compliance/Donations
+- **Brazilian regulatory pack** — LGPD (consent + DSAR + processing log) · MROSC (Lei 13.019/2014) · OSCIP (Lei 9.790/99) · Receita Federal (DIRF + IRPF receipts per Lei 9.249/95 art. 13)
+- **AI layer** with 11 seeded prompt templates and a Brazilian PII redactor (CPF/CNPJ check-digit validation, PIX/phone/CEP/email/bank patterns)
+- **Pure-Python utilities** with 154 passing pytest cases (on `19.0`) — being ported to TypeScript Vitest in the monorepo's `@usbea/lib`
+
+**Deployed at:** *(none — see banner above)*
+**Repo:** `SkilLab-Tech/NonprofitManager` (documentation spec only)
 **Author:** Automation Labs / SkilLab — [automation-labs.co](https://automation-labs.co)
 
 ---
