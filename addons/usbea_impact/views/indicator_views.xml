@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_indicator_list" model="ir.ui.view">
+        <field name="name">usbea.impact.indicator.list</field>
+        <field name="model">usbea.impact.indicator</field>
+        <field name="arch" type="xml">
+            <list decoration-success="status == 'achieved'" decoration-info="status == 'on_track'" decoration-warning="status == 'behind'" decoration-danger="status == 'at_risk'">
+                <field name="program_id"/>
+                <field name="name"/>
+                <field name="unit"/>
+                <field name="target_value"/>
+                <field name="current_value"/>
+                <field name="progress_pct" widget="progressbar"/>
+                <field name="status"/>
+                <field name="frequency"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_indicator_form" model="ir.ui.view">
+        <field name="name">usbea.impact.indicator.form</field>
+        <field name="model">usbea.impact.indicator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="program_id"/>
+                            <field name="name"/>
+                            <field name="unit"/>
+                            <field name="frequency"/>
+                        </group>
+                        <group>
+                            <field name="target_value"/>
+                            <field name="current_value" readonly="1"/>
+                            <field name="progress_pct" widget="progressbar" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Measurements">
+                            <field name="measurement_ids" context="{'default_indicator_id': active_id}">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="value"/>
+                                    <field name="source"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_indicator" model="ir.actions.act_window">
+        <field name="name">Outcome Indicators</field>
+        <field name="res_model">usbea.impact.indicator</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
