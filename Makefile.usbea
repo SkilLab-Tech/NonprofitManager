@@ -1,0 +1,58 @@
+# USBEA Nonprofit OS — Developer Convenience Targets
+#
+# Use: make -f Makefile.usbea <target>
+#
+# These targets operate only on addons/usbea_*/ — they will NEVER touch
+# upstream Odoo code or run upstream tests.
+
+.PHONY: help lint format sast test test-cov manifest-check all
+
+USBEA_MODS := $(wildcard addons/usbea_*)
+
+help:
+	@echo "USBEA Nonprofit OS — dev targets:"
+	@echo ""
+	@echo "  make -f Makefile.usbea lint           # ruff check on usbea_* modules"
+	@echo "  make -f Makefile.usbea format         # ruff format on usbea_* modules"
+	@echo "  make -f Makefile.usbea sast           # bandit SAST scan on usbea_* modules"
+	@echo "  make -f Makefile.usbea test           # pytest on usbea_* modules"
+	@echo "  make -f Makefile.usbea test-cov       # pytest + coverage gate (>=80%)"
+	@echo "  make -f Makefile.usbea manifest-check # validate __manifest__.py files"
+	@echo "  make -f Makefile.usbea all            # lint + sast + test-cov + manifest-check"
+	@echo ""
+	@echo "Modules detected: $(USBEA_MODS)"
+
+lint:
+	@if [ -z "$(USBEA_MODS)" ]; then echo "No usbea_* modules"; exit 0; fi
+	ruff check $(USBEA_MODS)
+
+format:
+	@if [ -z "$(USBEA_MODS)" ]; then echo "No usbea_* modules"; exit 0; fi
+	ruff format $(USBEA_MODS)
+
+sast:
+	@if [ -z "$(USBEA_MODS)" ]; then echo "No usbea_* modules"; exit 0; fi
+	bandit -c pyproject.toml -ll -ii -r $(USBEA_MODS)
+
+test:
+	@if [ -z "$(USBEA_MODS)" ]; then echo "No usbea_* modules"; exit 0; fi
+	pytest $(USBEA_MODS)
+
+test-cov:
+	@if [ -z "$(USBEA_MODS)" ]; then echo "No usbea_* modules"; exit 0; fi
+	pytest $(USBEA_MODS) \
+		--cov=addons \
+		--cov-report=term-missing \
+		--cov-fail-under=80
+
+manifest-check:
+	@for mod in $(USBEA_MODS); do \
+		python -c "import ast; data=ast.literal_eval(open('$$mod/__manifest__.py').read()); \
+		           required=['name','version','depends','license','category']; \
+		           missing=[k for k in required if k not in data]; \
+		           assert not missing, f'$$mod missing: {missing}'; \
+		           assert data['version'].startswith('19.0.'), f'$$mod bad version: {data[\"version\"]}'; \
+		           print(f'OK $$mod {data[\"version\"]} {data[\"license\"]}')" || exit 1; \
+	done
+
+all: lint sast test-cov manifest-check
