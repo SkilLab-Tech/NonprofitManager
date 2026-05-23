@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_briefing_list" model="ir.ui.view">
+        <field name="name">usbea.portal.board_briefing.list</field>
+        <field name="model">usbea.portal.board_briefing</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="generated_at"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_briefing_form" model="ir.ui.view">
+        <field name="name">usbea.portal.board_briefing.form</field>
+        <field name="model">usbea.portal.board_briefing</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_assemble" type="object" string="Assemble (re-run AI)" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                        <group>
+                            <field name="generated_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="KPIs (raw)">
+                            <field name="kpis_json" widget="text" readonly="1"/>
+                        </page>
+                        <page string="Stale tasks summary">
+                            <field name="stale_tasks_summary" widget="text" readonly="1"/>
+                            <field name="stale_tasks_suggestion_id" readonly="1"/>
+                        </page>
+                        <page string="Commentary">
+                            <field name="commentary" readonly="1"/>
+                            <field name="commentary_suggestion_id" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_briefing" model="ir.actions.act_window">
+        <field name="name">Board Briefings</field>
+        <field name="res_model">usbea.portal.board_briefing</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

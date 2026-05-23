@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_portal_ai_root" name="Board Briefings" parent="usbea_ai.menu_usbea_ai_root" action="action_briefing" sequence="5"/>
+</odoo>

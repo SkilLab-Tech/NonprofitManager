@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_briefing_user,usbea.portal.board_briefing.user,model_usbea_portal_board_briefing,usbea_ai.group_usbea_ai_user,1,1,1,0
+access_briefing_manager,usbea.portal.board_briefing.manager,model_usbea_portal_board_briefing,usbea_ai.group_usbea_ai_manager,1,1,1,1
