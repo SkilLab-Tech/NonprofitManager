@@ -1,0 +1,122 @@
+name: USBEA Integration Tests
+
+# Spins up Postgres + installs the Odoo Python requirements, then runs
+# ``odoo-bin -i <module> --test-enable --stop-after-init`` for each new
+# usbea_* module. Heavy job — runs only on changes to addons/usbea_*/
+# or this workflow.
+
+on:
+  pull_request:
+    paths:
+      - 'addons/usbea_*/**'
+      - '.github/workflows/usbea-integration.yml'
+  push:
+    branches:
+      - 19.0
+    paths:
+      - 'addons/usbea_*/**'
+      - '.github/workflows/usbea-integration.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  odoo-integration:
+    name: Odoo --test-enable per usbea_* module
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: System packages required by Odoo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libldap2-dev libsasl2-dev libpq-dev libxslt1-dev libxml2-dev \
+            libjpeg-dev zlib1g-dev wkhtmltopdf
+
+      - name: Install Odoo dependencies
+        run: |
+          pip install --upgrade pip wheel setuptools
+          pip install -r requirements.txt
+          pip install anthropic  # external_dependencies of usbea_ai
+
+      - name: Run --test-enable per usbea_* module
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGUSER: odoo
+          PGPASSWORD: odoo
+        run: |
+          set -e
+          declare -a MODULES=(
+            usbea_ai
+            usbea_crm
+            usbea_compliance_br
+            usbea_grants_seeking
+            usbea_donations
+            usbea_volunteers
+            usbea_portal_ai
+            usbea_tasks
+            usbea_impact
+          )
+          mkdir -p logs
+          for mod in "${MODULES[@]}"; do
+            mod_dir="addons/$mod"
+            tests_dir="$mod_dir/tests"
+            if [ ! -d "$mod_dir" ]; then
+              echo "::notice file=$mod_dir::module not on this branch, skipping"
+              continue
+            fi
+            if [ ! -d "$tests_dir" ] || ! find "$tests_dir" -name 'test_*.py' -size +1c | grep -q .; then
+              echo "::notice file=$mod_dir::no integration tests yet, skipping"
+              continue
+            fi
+            db="test_${mod}_${GITHUB_RUN_ID}"
+            echo "::group::$mod integration tests"
+            ./odoo-bin \
+              --addons-path=addons \
+              -d "$db" \
+              -i "$mod" \
+              --test-enable \
+              --test-tags "/$mod" \
+              --stop-after-init \
+              --without-demo=all \
+              --log-level=test \
+              2>&1 | tee "logs/$mod.log"
+            # Fail the job if Odoo's test summary reports failures.
+            if grep -qE "FAIL|ERROR.*usbea_" "logs/$mod.log"; then
+              echo "::error file=$mod_dir::integration tests failed — see logs/$mod.log"
+              exit 1
+            fi
+            echo "::endgroup::"
+          done
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odoo-integration-logs
+          path: logs/
+          if-no-files-found: ignore
