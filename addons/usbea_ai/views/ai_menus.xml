@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_usbea_ai_root"
+              name="USBEA AI"
+              sequence="60"
+              groups="usbea_ai.group_usbea_ai_user"
+              web_icon="usbea_ai,static/description/icon.png"/>
+
+    <menuitem id="menu_usbea_ai_suggestions"
+              name="Audit Log"
+              parent="menu_usbea_ai_root"
+              action="action_usbea_ai_suggestion"
+              sequence="10"
+              groups="usbea_ai.group_usbea_ai_user"/>
+
+    <menuitem id="menu_usbea_ai_templates"
+              name="Prompt Templates"
+              parent="menu_usbea_ai_root"
+              action="action_usbea_ai_prompt_template"
+              sequence="20"
+              groups="usbea_ai.group_usbea_ai_manager"/>
+
+    <menuitem id="menu_usbea_ai_settings"
+              name="Settings"
+              parent="menu_usbea_ai_root"
+              action="action_usbea_ai_config_settings"
+              sequence="90"
+              groups="usbea_ai.group_usbea_ai_manager"/>
+
+</odoo>

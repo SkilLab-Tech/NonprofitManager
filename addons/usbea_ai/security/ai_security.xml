@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Category + groups
+             Reuse usbea_rbac for Diretoria role; add a narrower
+             "AI Operator" role for staff that can accept/reject suggestions
+             but not edit prompt templates. -->
+
+        <record id="module_category_usbea_ai" model="ir.module.category">
+            <field name="name">USBEA AI</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <record id="group_usbea_ai_user" model="res.groups">
+            <field name="name">USBEA AI / User</field>
+            <field name="category_id" ref="module_category_usbea_ai"/>
+            <field name="comment">Can call AI suggestions and accept/reject them. Cannot edit prompts or settings.</field>
+        </record>
+
+        <record id="group_usbea_ai_manager" model="res.groups">
+            <field name="name">USBEA AI / Manager</field>
+            <field name="category_id" ref="module_category_usbea_ai"/>
+            <field name="implied_ids" eval="[(4, ref('group_usbea_ai_user'))]"/>
+            <field name="comment">Full access: edit prompt templates, view audit log, configure API key.</field>
+        </record>
+
+        <!-- Record rules: company-scoped suggestion log.
+             Each company can only see its own AI activity. -->
+        <record id="rule_ai_suggestion_company" model="ir.rule">
+            <field name="name">usbea.ai.suggestion: company-scoped</field>
+            <field name="model_id" ref="model_usbea_ai_suggestion"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+    </data>
+</odoo>

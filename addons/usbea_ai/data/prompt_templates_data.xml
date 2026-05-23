@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- =================================================================
+             Seeded prompt templates — see docs/AI.md §3 for the spec.
+
+             All system prompts default to PT-BR (USBEA Brasil is the primary
+             tenant). Templates marked locale="multi" handle EN/PT input.
+             ============================================================== -->
+
+        <!-- Pillar 1 — Tasks -->
+        <record id="tpl_task_priority" model="usbea.ai.prompt_template">
+            <field name="name">Task — Smart prioritization</field>
+            <field name="technical_key">task_priority</field>
+            <field name="description">Rank tasks by urgency × impact for a nonprofit context.</field>
+            <field name="tier">quick</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">512</field>
+            <field name="temperature">0.2</field>
+            <field name="system_prompt"><![CDATA[
+Você é um assistente de operações para uma ONG brasileira. Dada uma lista de tarefas,
+retorne uma priorização concisa em JSON com a forma:
+{"ranking": [{"id": "...", "score": 0-100, "reason": "..."}]}
+Considere urgência (prazos próximos), impacto (programa, doadores, conformidade)
+e dependências. Não invente datas; use apenas o que estiver no contexto.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Tarefas para priorizar (JSON):
+{{tasks_json}}
+
+Contexto adicional: {{context_notes}}
+
+Retorne APENAS JSON válido, sem comentários.
+            ]]></field>
+        </record>
+
+        <record id="tpl_task_next_action" model="usbea.ai.prompt_template">
+            <field name="name">Task — Suggest next action</field>
+            <field name="technical_key">task_next_action</field>
+            <field name="tier">standard</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">512</field>
+            <field name="temperature">0.4</field>
+            <field name="system_prompt"><![CDATA[
+Você é um coach de produtividade para equipes de ONGs brasileiras. Dada uma tarefa
+travada, sugira a PRÓXIMA AÇÃO concreta (verbo + objeto + prazo sugerido). Máximo
+3 frases. Não repita o que já está no histórico.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Tarefa: {{task_title}}
+Estado atual: {{task_state}}
+Histórico recente: {{history}}
+Notas: {{notes}}
+
+Próxima ação:
+            ]]></field>
+        </record>
+
+        <record id="tpl_stale_tasks_summary" model="usbea.ai.prompt_template">
+            <field name="name">Tasks — Stale-task summary (board portal)</field>
+            <field name="technical_key">stale_tasks_summary</field>
+            <field name="tier">quick</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">400</field>
+            <field name="temperature">0.3</field>
+            <field name="system_prompt"><![CDATA[
+Resuma o estado das tarefas paradas (>7 dias sem atividade) para o portal do conselho.
+Tom executivo, em 3-5 bullets. Identifique padrões (ex: gargalo num responsável, num programa).
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Tarefas paradas (JSON):
+{{stale_tasks_json}}
+
+Resumo:
+            ]]></field>
+        </record>
+
+        <!-- Pillar 2 — CRM -->
+        <record id="tpl_donor_segmentation" model="usbea.ai.prompt_template">
+            <field name="name">CRM — Donor segmentation</field>
+            <field name="technical_key">donor_segmentation</field>
+            <field name="tier">standard</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">1024</field>
+            <field name="temperature">0.3</field>
+            <field name="system_prompt"><![CDATA[
+Agrupe doadores em segmentos acionáveis (3-6 segmentos). Para cada segmento, retorne:
+- nome do segmento
+- critério de inclusão (regra)
+- ação de cultivo recomendada
+Retorne JSON: {"segments": [{"name", "criteria", "next_move"}]}
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Doadores (JSON, sem PII bruta):
+{{donors_json}}
+
+Histórico de engajamento:
+{{engagement_json}}
+            ]]></field>
+        </record>
+
+        <record id="tpl_donor_next_move" model="usbea.ai.prompt_template">
+            <field name="name">CRM — Suggest next cultivation move</field>
+            <field name="technical_key">donor_next_move</field>
+            <field name="tier">standard</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">512</field>
+            <field name="temperature">0.5</field>
+            <field name="system_prompt"><![CDATA[
+Sugira a próxima ação de cultivo para um doador. Considere o estágio atual no funil
+(prospect, qualificação, cultivo, solicitação, mordomia), histórico de engajamento e
+montante típico. Saída: 1 ação concreta + justificativa em 1 frase.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Doador (perfil anonimizado): {{donor_profile}}
+Estágio: {{stage}}
+Histórico de movimentos: {{moves_history}}
+
+Próxima ação recomendada:
+            ]]></field>
+        </record>
+
+        <record id="tpl_donor_thanks_draft" model="usbea.ai.prompt_template">
+            <field name="name">CRM — Thank-you email draft</field>
+            <field name="technical_key">donor_thanks_draft</field>
+            <field name="tier">quick</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">512</field>
+            <field name="temperature">0.7</field>
+            <field name="system_prompt"><![CDATA[
+Escreva um email de agradecimento curto (máx 120 palavras), caloroso e específico ao
+contexto da doação. Não invente nomes nem valores; use apenas os tokens fornecidos.
+Estilo: profissional, brasileiro, sem clichês.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Doador (token): {{donor_token}}
+Tipo de doação: {{donation_type}}
+Programa apoiado: {{program}}
+Tom: {{tone}}
+
+Email:
+            ]]></field>
+        </record>
+
+        <record id="tpl_dsar_response_draft" model="usbea.ai.prompt_template">
+            <field name="name">Compliance — DSAR response draft</field>
+            <field name="technical_key">dsar_response_draft</field>
+            <field name="tier">deep</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">2048</field>
+            <field name="temperature">0.2</field>
+            <field name="system_prompt"><![CDATA[
+Você é um assistente jurídico de LGPD. Redija uma resposta formal a uma solicitação de
+direito do titular (Lei 13.709/2018, art. 18). Estrutura obrigatória:
+1) Identificação da solicitação
+2) Confirmação do tratamento (se aplicável)
+3) Dados tratados (resumo categórico)
+4) Base legal por categoria
+5) Ações tomadas (acesso/correção/exclusão/portabilidade)
+6) Próximos passos / prazo
+Linguagem clara, sem juridiquês excessivo.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Tipo de solicitação: {{request_type}}
+Resumo dos dados encontrados: {{data_summary}}
+Status: {{status}}
+
+Resposta formal:
+            ]]></field>
+        </record>
+
+        <!-- Pillar 3 — Grant seeking -->
+        <record id="tpl_grant_writing" model="usbea.ai.prompt_template">
+            <field name="name">Grants — Application writing copilot (flagship)</field>
+            <field name="technical_key">grant_writing</field>
+            <field name="tier">deep</field>
+            <field name="locale">multi</field>
+            <field name="max_tokens">4096</field>
+            <field name="temperature">0.5</field>
+            <field name="system_prompt"><![CDATA[
+You are a senior grant writer for a Brazilian alumni-driven nonprofit (USBEA Brasil).
+Write the requested section of a grant application in the funder's language (EN or PT-BR).
+Be specific: cite real program outcomes from the context. Avoid jargon. Match the funder's
+voice (foundation vs government vs corporate). Never fabricate metrics — if a number isn't
+provided, write the section in a way that can accept the number later (e.g. "[outcome figure]").
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Funder: {{funder_name}}
+Funder profile: {{funder_profile}}
+Application section requested: {{section}}
+Programs involved: {{programs}}
+Context (outcomes, beneficiary counts, prior partnerships):
+{{program_context}}
+Existing draft so far (may be empty):
+{{draft_so_far}}
+Target word count: {{word_count}}
+
+Draft:
+            ]]></field>
+        </record>
+
+        <record id="tpl_grant_fit_score" model="usbea.ai.prompt_template">
+            <field name="name">Grants — Funder fit score</field>
+            <field name="technical_key">grant_fit_score</field>
+            <field name="tier">standard</field>
+            <field name="locale">multi</field>
+            <field name="max_tokens">512</field>
+            <field name="temperature">0.2</field>
+            <field name="system_prompt"><![CDATA[
+Score the fit between a funder and a USBEA program proposal on a 0-100 scale.
+Return JSON: {"score": 0-100, "rationale": "...", "concerns": ["..."], "strengths": ["..."]}
+Be candid; under-scoring is better than over-scoring.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Funder profile: {{funder_profile}}
+Funder focus areas: {{focus_areas}}
+Typical grant size: {{typical_size}}
+Program: {{program_name}}
+Program goals: {{program_goals}}
+            ]]></field>
+        </record>
+
+        <record id="tpl_grant_translate" model="usbea.ai.prompt_template">
+            <field name="name">Grants — EN ↔ PT-BR translation pass</field>
+            <field name="technical_key">grant_translate</field>
+            <field name="tier">standard</field>
+            <field name="locale">multi</field>
+            <field name="max_tokens">4096</field>
+            <field name="temperature">0.3</field>
+            <field name="system_prompt"><![CDATA[
+Translate a grant application section between English and Brazilian Portuguese,
+preserving formal register, specific numbers, and program-specific terminology.
+Do NOT localize organization names. If a term has no clean equivalent, keep the
+original in italics and provide a translator's note in parentheses.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Source language: {{source_lang}}
+Target language: {{target_lang}}
+
+Text:
+{{source_text}}
+
+Translation:
+            ]]></field>
+        </record>
+
+        <!-- Pillar 4 — Impact -->
+        <record id="tpl_impact_narrative" model="usbea.ai.prompt_template">
+            <field name="name">Impact — Narrative report generation</field>
+            <field name="technical_key">impact_narrative</field>
+            <field name="tier">deep</field>
+            <field name="locale">pt_BR</field>
+            <field name="max_tokens">3072</field>
+            <field name="temperature">0.6</field>
+            <field name="system_prompt"><![CDATA[
+Você é um analista de impacto social. A partir de indicadores quantitativos e histórias
+qualitativas (anonimizadas), escreva um relatório de impacto para o público doador.
+Estrutura: contexto → atividades → resultados (com números) → histórias (com tokens
+de pessoas, sem nomes) → próximos passos. Tom: factual, inspirador, brasileiro.
+            ]]></field>
+            <field name="user_prompt_template"><![CDATA[
+Período: {{period}}
+Programas: {{programs}}
+Indicadores (JSON): {{indicators_json}}
+Histórias (anonimizadas): {{stories}}
+Público-alvo do relatório: {{audience}}
+
+Relatório:
+            ]]></field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- =================================================================
+             Six seeded nonprofit task templates — Phase 1 per docs/PRD.md.
+             Categories: program_launch, grant_report, board_meeting,
+             event_planning, donor_cultivation, compliance_deadline.
+             ============================================================== -->
+
+        <record id="tpl_program_launch" model="usbea.task.template">
+            <field name="name">Lançamento de programa</field>
+            <field name="technical_key">tpl_program_launch</field>
+            <field name="category">program_launch</field>
+            <field name="default_assignee_role">program_manager</field>
+            <field name="default_due_offset_days">60</field>
+            <field name="default_priority">2</field>
+            <field name="description">
+                Lista padrão para lançar um novo programa USBEA (YLAI/IVLP/Fulbright etc.):
+                definição de critérios, divulgação, seleção, contratos, kick-off.
+            </field>
+        </record>
+
+        <record id="tpl_program_launch_step_1" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_program_launch"/>
+            <field name="sequence">10</field>
+            <field name="name">Definir critérios de seleção e perfil esperado</field>
+            <field name="due_offset_days">5</field>
+        </record>
+        <record id="tpl_program_launch_step_2" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_program_launch"/>
+            <field name="sequence">20</field>
+            <field name="name">Publicar chamada (site, Discourse, redes sociais)</field>
+            <field name="due_offset_days">10</field>
+        </record>
+        <record id="tpl_program_launch_step_3" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_program_launch"/>
+            <field name="sequence">30</field>
+            <field name="name">Triagem de candidaturas</field>
+            <field name="due_offset_days">30</field>
+        </record>
+        <record id="tpl_program_launch_step_4" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_program_launch"/>
+            <field name="sequence">40</field>
+            <field name="name">Entrevistas e decisão final</field>
+            <field name="due_offset_days">45</field>
+        </record>
+        <record id="tpl_program_launch_step_5" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_program_launch"/>
+            <field name="sequence">50</field>
+            <field name="name">Contratos / termos de adesão dos participantes</field>
+            <field name="due_offset_days">52</field>
+        </record>
+        <record id="tpl_program_launch_step_6" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_program_launch"/>
+            <field name="sequence">60</field>
+            <field name="name">Kick-off com participantes e equipe</field>
+            <field name="due_offset_days">60</field>
+        </record>
+
+        <record id="tpl_grant_report" model="usbea.task.template">
+            <field name="name">Relatório de grant (quarterly)</field>
+            <field name="technical_key">tpl_grant_report</field>
+            <field name="category">grant_report</field>
+            <field name="default_assignee_role">program_manager</field>
+            <field name="default_due_offset_days">21</field>
+            <field name="default_priority">2</field>
+            <field name="description">
+                Cadência padrão para um relatório trimestral de grant:
+                coleta de dados, narrativa, financeiro, revisão, submissão.
+            </field>
+        </record>
+
+        <record id="tpl_grant_report_step_1" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_grant_report"/>
+            <field name="sequence">10</field>
+            <field name="name">Coletar indicadores quantitativos do trimestre</field>
+            <field name="due_offset_days">5</field>
+        </record>
+        <record id="tpl_grant_report_step_2" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_grant_report"/>
+            <field name="sequence">20</field>
+            <field name="name">Escrever narrativa de atividades e impacto</field>
+            <field name="due_offset_days">10</field>
+        </record>
+        <record id="tpl_grant_report_step_3" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_grant_report"/>
+            <field name="sequence">30</field>
+            <field name="name">Reconciliar despesas com orçamento aprovado</field>
+            <field name="due_offset_days">12</field>
+        </record>
+        <record id="tpl_grant_report_step_4" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_grant_report"/>
+            <field name="sequence">40</field>
+            <field name="name">Revisão pela Diretoria</field>
+            <field name="due_offset_days">17</field>
+        </record>
+        <record id="tpl_grant_report_step_5" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_grant_report"/>
+            <field name="sequence">50</field>
+            <field name="name">Submeter ao funder + arquivar no DMS</field>
+            <field name="due_offset_days">21</field>
+        </record>
+
+        <record id="tpl_board_meeting" model="usbea.task.template">
+            <field name="name">Preparação para reunião do conselho</field>
+            <field name="technical_key">tpl_board_meeting</field>
+            <field name="category">board_meeting</field>
+            <field name="default_assignee_role">executive_director</field>
+            <field name="default_due_offset_days">14</field>
+            <field name="default_priority">2</field>
+        </record>
+
+        <record id="tpl_board_meeting_step_1" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_board_meeting"/>
+            <field name="sequence">10</field>
+            <field name="name">Definir pauta e enviar convite</field>
+            <field name="due_offset_days">3</field>
+        </record>
+        <record id="tpl_board_meeting_step_2" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_board_meeting"/>
+            <field name="sequence">20</field>
+            <field name="name">Atualizar dashboard de KPIs financeiros e de programas</field>
+            <field name="due_offset_days">7</field>
+        </record>
+        <record id="tpl_board_meeting_step_3" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_board_meeting"/>
+            <field name="sequence">30</field>
+            <field name="name">Compilar deliberações pendentes do trimestre anterior</field>
+            <field name="due_offset_days">9</field>
+        </record>
+        <record id="tpl_board_meeting_step_4" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_board_meeting"/>
+            <field name="sequence">40</field>
+            <field name="name">Enviar pacote do conselho (5 dias antes)</field>
+            <field name="due_offset_days">9</field>
+        </record>
+        <record id="tpl_board_meeting_step_5" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_board_meeting"/>
+            <field name="sequence">50</field>
+            <field name="name">Conduzir a reunião e registrar ata</field>
+            <field name="due_offset_days">14</field>
+        </record>
+
+        <record id="tpl_event_planning" model="usbea.task.template">
+            <field name="name">Planejamento de evento</field>
+            <field name="technical_key">tpl_event_planning</field>
+            <field name="category">event_planning</field>
+            <field name="default_assignee_role">ops_manager</field>
+            <field name="default_due_offset_days">45</field>
+            <field name="default_priority">1</field>
+        </record>
+
+        <record id="tpl_event_planning_step_1" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_event_planning"/>
+            <field name="sequence">10</field>
+            <field name="name">Definir objetivo, público-alvo e formato (presencial/online/híbrido)</field>
+            <field name="due_offset_days">3</field>
+        </record>
+        <record id="tpl_event_planning_step_2" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_event_planning"/>
+            <field name="sequence">20</field>
+            <field name="name">Reservar espaço / plataforma e palestrantes</field>
+            <field name="due_offset_days">15</field>
+        </record>
+        <record id="tpl_event_planning_step_3" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_event_planning"/>
+            <field name="sequence">30</field>
+            <field name="name">Abrir inscrições e divulgar</field>
+            <field name="due_offset_days">25</field>
+        </record>
+        <record id="tpl_event_planning_step_4" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_event_planning"/>
+            <field name="sequence">40</field>
+            <field name="name">Confirmar logística e materiais</field>
+            <field name="due_offset_days">40</field>
+        </record>
+        <record id="tpl_event_planning_step_5" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_event_planning"/>
+            <field name="sequence">50</field>
+            <field name="name">Executar o evento</field>
+            <field name="due_offset_days">45</field>
+        </record>
+        <record id="tpl_event_planning_step_6" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_event_planning"/>
+            <field name="sequence">60</field>
+            <field name="name">Pós-evento: pesquisa, relatório, fotos no DMS</field>
+            <field name="due_offset_days">52</field>
+        </record>
+
+        <record id="tpl_donor_cultivation" model="usbea.task.template">
+            <field name="name">Ciclo de cultivo de doador</field>
+            <field name="technical_key">tpl_donor_cultivation</field>
+            <field name="category">donor_cultivation</field>
+            <field name="default_assignee_role">executive_director</field>
+            <field name="default_due_offset_days">90</field>
+            <field name="default_priority">1</field>
+            <field name="description">
+                Cadência clássica de moves management (research → qualify →
+                cultivate → solicit → steward).
+            </field>
+        </record>
+
+        <record id="tpl_donor_cultivation_step_1" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_donor_cultivation"/>
+            <field name="sequence">10</field>
+            <field name="name">Pesquisa: capacidade, interesses, conexões</field>
+            <field name="due_offset_days">7</field>
+        </record>
+        <record id="tpl_donor_cultivation_step_2" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_donor_cultivation"/>
+            <field name="sequence">20</field>
+            <field name="name">Qualificação inicial: contato exploratório</field>
+            <field name="due_offset_days">21</field>
+        </record>
+        <record id="tpl_donor_cultivation_step_3" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_donor_cultivation"/>
+            <field name="sequence">30</field>
+            <field name="name">Cultivo: visita, evento, conteúdo personalizado</field>
+            <field name="due_offset_days">45</field>
+        </record>
+        <record id="tpl_donor_cultivation_step_4" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_donor_cultivation"/>
+            <field name="sequence">40</field>
+            <field name="name">Solicitação (pedido formal alinhado ao perfil)</field>
+            <field name="due_offset_days">75</field>
+        </record>
+        <record id="tpl_donor_cultivation_step_5" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_donor_cultivation"/>
+            <field name="sequence">50</field>
+            <field name="name">Mordomia: agradecimento e prestação de contas</field>
+            <field name="due_offset_days">90</field>
+        </record>
+
+        <record id="tpl_compliance_deadline" model="usbea.task.template">
+            <field name="name">Conformidade — prazo regulatório</field>
+            <field name="technical_key">tpl_compliance_deadline</field>
+            <field name="category">compliance_deadline</field>
+            <field name="default_assignee_role">treasurer</field>
+            <field name="default_due_offset_days">30</field>
+            <field name="default_priority">3</field>
+            <field name="description">
+                Lista genérica para qualquer obrigação regulatória brasileira
+                (LGPD, MROSC, OSCIP, Receita Federal — DIRF/ECF).
+            </field>
+        </record>
+
+        <record id="tpl_compliance_deadline_step_1" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_compliance_deadline"/>
+            <field name="sequence">10</field>
+            <field name="name">Identificar requisitos da obrigação e prazo legal</field>
+            <field name="due_offset_days">3</field>
+        </record>
+        <record id="tpl_compliance_deadline_step_2" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_compliance_deadline"/>
+            <field name="sequence">20</field>
+            <field name="name">Coletar documentos e dados necessários</field>
+            <field name="due_offset_days">14</field>
+        </record>
+        <record id="tpl_compliance_deadline_step_3" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_compliance_deadline"/>
+            <field name="sequence">30</field>
+            <field name="name">Revisar com contador / consultor jurídico</field>
+            <field name="due_offset_days">21</field>
+        </record>
+        <record id="tpl_compliance_deadline_step_4" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_compliance_deadline"/>
+            <field name="sequence">40</field>
+            <field name="name">Submeter à autoridade e arquivar protocolo</field>
+            <field name="due_offset_days">28</field>
+        </record>
+        <record id="tpl_compliance_deadline_step_5" model="usbea.task.checklist_item">
+            <field name="template_id" ref="tpl_compliance_deadline"/>
+            <field name="sequence">50</field>
+            <field name="name">Atualizar registro de tratamento (LGPD Art. 37) se aplicável</field>
+            <field name="due_offset_days">30</field>
+        </record>
+
+    </data>
+</odoo>

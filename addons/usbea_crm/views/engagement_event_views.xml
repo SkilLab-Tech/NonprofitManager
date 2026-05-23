@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_engagement_event_list" model="ir.ui.view">
+        <field name="name">usbea.engagement.event.list</field>
+        <field name="model">usbea.engagement.event</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="when"/>
+                <field name="partner_id"/>
+                <field name="event_type"/>
+                <field name="source"/>
+                <field name="notes"/>
+                <field name="score_delta_override"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_engagement_event" model="ir.actions.act_window">
+        <field name="name">Engagement Events</field>
+        <field name="res_model">usbea.engagement.event</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

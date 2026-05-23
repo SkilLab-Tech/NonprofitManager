@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_story_list" model="ir.ui.view">
+        <field name="name">usbea.impact.story.list</field>
+        <field name="model">usbea.impact.story</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="title"/>
+                <field name="program_id"/>
+                <field name="period"/>
+                <field name="identified_with_consent" widget="boolean_toggle"/>
+                <field name="consent_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_story_form" model="ir.ui.view">
+        <field name="name">usbea.impact.story.form</field>
+        <field name="model">usbea.impact.story</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="title"/>
+                            <field name="program_id"/>
+                            <field name="period"/>
+                        </group>
+                        <group>
+                            <field name="beneficiary_partner_id"/>
+                            <field name="identified_with_consent"/>
+                            <field name="consent_id" invisible="not identified_with_consent"/>
+                        </group>
+                    </group>
+                    <field name="narrative"/>
+                    <field name="media_attachment_ids" widget="many2many"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_story" model="ir.actions.act_window">
+        <field name="name">Impact Stories</field>
+        <field name="res_model">usbea.impact.story</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_usbea_task_template_user,usbea.task.template.user,model_usbea_task_template,group_usbea_tasks_user,1,0,0,0
+access_usbea_task_template_manager,usbea.task.template.manager,model_usbea_task_template,group_usbea_tasks_manager,1,1,1,1
+access_usbea_task_checklist_item_user,usbea.task.checklist_item.user,model_usbea_task_checklist_item,group_usbea_tasks_user,1,0,0,0
+access_usbea_task_checklist_item_manager,usbea.task.checklist_item.manager,model_usbea_task_checklist_item,group_usbea_tasks_manager,1,1,1,1

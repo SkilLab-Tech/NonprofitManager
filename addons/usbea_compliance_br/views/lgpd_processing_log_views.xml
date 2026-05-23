@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lgpd_processing_log_list" model="ir.ui.view">
+        <field name="name">usbea.lgpd.processing_log.list</field>
+        <field name="model">usbea.lgpd.processing_log</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="international_transfer">
+                <field name="data_class"/>
+                <field name="purpose"/>
+                <field name="lawful_basis"/>
+                <field name="retention_period"/>
+                <field name="international_transfer" widget="boolean_toggle"/>
+                <field name="module_origin"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lgpd_processing_log_form" model="ir.ui.view">
+        <field name="name">usbea.lgpd.processing_log.form</field>
+        <field name="model">usbea.lgpd.processing_log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="data_class"/>
+                        <field name="lawful_basis"/>
+                        <field name="module_origin"/>
+                    </group>
+                    <group>
+                        <field name="purpose"/>
+                        <field name="retention_period"/>
+                        <field name="sharing_recipients"/>
+                    </group>
+                    <group>
+                        <field name="international_transfer"/>
+                        <field name="transfer_safeguards" invisible="not international_transfer"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lgpd_processing_log" model="ir.actions.act_window">
+        <field name="name">LGPD Processing Log</field>
+        <field name="res_model">usbea.lgpd.processing_log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

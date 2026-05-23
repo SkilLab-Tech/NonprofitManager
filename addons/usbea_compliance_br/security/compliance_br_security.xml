@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="module_category_usbea_compliance_br" model="ir.module.category">
+            <field name="name">USBEA BR Compliance</field>
+            <field name="sequence">95</field>
+        </record>
+
+        <record id="group_compliance_br_officer" model="res.groups">
+            <field name="name">USBEA Compliance / Officer</field>
+            <field name="category_id" ref="module_category_usbea_compliance_br"/>
+            <field name="comment">Can record consents, manage DSARs, file MROSC reports.</field>
+        </record>
+
+        <record id="group_compliance_br_manager" model="res.groups">
+            <field name="name">USBEA Compliance / Manager</field>
+            <field name="category_id" ref="module_category_usbea_compliance_br"/>
+            <field name="implied_ids" eval="[(4, ref('group_compliance_br_officer'))]"/>
+            <field name="comment">DPO-equivalent. Approves DSAR responses, edits processing log, configures OSCIP status.</field>
+        </record>
+
+        <!-- Company-scoped record rules -->
+
+        <record id="rule_lgpd_consent_company" model="ir.rule">
+            <field name="name">LGPD consent: company-scoped</field>
+            <field name="model_id" ref="model_usbea_lgpd_consent"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_lgpd_dsar_company" model="ir.rule">
+            <field name="name">LGPD DSAR: company-scoped</field>
+            <field name="model_id" ref="model_usbea_lgpd_dsar"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_mrosc_company" model="ir.rule">
+            <field name="name">MROSC partnership: company-scoped</field>
+            <field name="model_id" ref="model_usbea_mrosc_partnership"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Sequence for DSAR numbering -->
+        <record id="seq_lgpd_dsar" model="ir.sequence">
+            <field name="name">LGPD DSAR</field>
+            <field name="code">usbea.lgpd.dsar</field>
+            <field name="prefix">DSAR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

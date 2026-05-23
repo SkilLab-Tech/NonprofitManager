@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_impact_root" name="USBEA Impact" sequence="68" groups="usbea_impact.group_impact_user"/>
+
+    <menuitem id="menu_impact_indicators" parent="menu_impact_root" name="Indicators" action="action_indicator" sequence="10"/>
+    <menuitem id="menu_impact_measurements" parent="menu_impact_root" name="Measurements" action="action_measurement" sequence="20"/>
+    <menuitem id="menu_impact_stories" parent="menu_impact_root" name="Stories" action="action_story" sequence="30"/>
+    <menuitem id="menu_impact_reports" parent="menu_impact_root" name="Reports" action="action_report" sequence="40"/>
+</odoo>

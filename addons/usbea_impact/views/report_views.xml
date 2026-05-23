@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_report_list" model="ir.ui.view">
+        <field name="name">usbea.impact.report.list</field>
+        <field name="model">usbea.impact.report</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="audience"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_report_form" model="ir.ui.view">
+        <field name="name">usbea.impact.report.form</field>
+        <field name="model">usbea.impact.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_narrative" type="object" string="AI: generate narrative" class="btn-primary" invisible="state == 'published'" groups="usbea_ai.group_usbea_ai_user"/>
+                    <button name="action_publish" type="object" string="Publish" class="btn-success" invisible="state == 'published'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                        <group>
+                            <field name="audience"/>
+                            <field name="published_at" readonly="1"/>
+                            <field name="ai_suggestion_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="program_ids" widget="many2many_tags"/>
+                    <field name="narrative"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_report" model="ir.actions.act_window">
+        <field name="name">Impact Reports</field>
+        <field name="res_model">usbea.impact.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_indicator_user,usbea.impact.indicator.user,model_usbea_impact_indicator,group_impact_user,1,1,1,0
+access_indicator_manager,usbea.impact.indicator.manager,model_usbea_impact_indicator,group_impact_manager,1,1,1,1
+access_measurement_user,usbea.impact.measurement.user,model_usbea_impact_measurement,group_impact_user,1,1,1,0
+access_measurement_manager,usbea.impact.measurement.manager,model_usbea_impact_measurement,group_impact_manager,1,1,1,1
+access_story_user,usbea.impact.story.user,model_usbea_impact_story,group_impact_user,1,1,1,0
+access_story_manager,usbea.impact.story.manager,model_usbea_impact_story,group_impact_manager,1,1,1,1
+access_report_user,usbea.impact.report.user,model_usbea_impact_report,group_impact_user,1,1,1,0
+access_report_manager,usbea.impact.report.manager,model_usbea_impact_report,group_impact_manager,1,1,1,1

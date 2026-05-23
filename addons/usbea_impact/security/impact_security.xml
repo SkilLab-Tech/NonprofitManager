@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="module_category_usbea_impact" model="ir.module.category">
+            <field name="name">USBEA Impact</field>
+            <field name="sequence">85</field>
+        </record>
+
+        <record id="group_impact_user" model="res.groups">
+            <field name="name">USBEA Impact / User</field>
+            <field name="category_id" ref="module_category_usbea_impact"/>
+        </record>
+
+        <record id="group_impact_manager" model="res.groups">
+            <field name="name">USBEA Impact / Manager</field>
+            <field name="category_id" ref="module_category_usbea_impact"/>
+            <field name="implied_ids" eval="[(4, ref('group_impact_user'))]"/>
+        </record>
+
+        <record id="rule_impact_report_company" model="ir.rule">
+            <field name="name">Impact report: company-scoped</field>
+            <field name="model_id" ref="model_usbea_impact_report"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+    </data>
+</odoo>

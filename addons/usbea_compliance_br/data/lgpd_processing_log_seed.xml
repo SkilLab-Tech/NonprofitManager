@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Seeded processing-log entries for each USBEA data class.
+             Add a record here for every new data class introduced by a
+             new module so the Art. 37 registry stays current. -->
+
+        <record id="processing_donor_contact" model="usbea.lgpd.processing_log">
+            <field name="name">Donor contact information</field>
+            <field name="data_class">Donor contact info (name, email, phone, CPF)</field>
+            <field name="purpose">Identify donors, issue tax receipts, send acknowledgements and stewardship communications.</field>
+            <field name="lawful_basis">consent</field>
+            <field name="retention_period">5 years post last donation (Receita Federal requirement)</field>
+            <field name="sharing_recipients">None by default; Mailchimp/Sendpulse upon donor opt-in for newsletters</field>
+            <field name="international_transfer">False</field>
+            <field name="module_origin">usbea_crm</field>
+        </record>
+
+        <record id="processing_alumni_diretoria" model="usbea.lgpd.processing_log">
+            <field name="name">Diretoria contact information</field>
+            <field name="data_class">Board member identity, contact, role tenure</field>
+            <field name="purpose">Governance: track board composition, decisions, statutory registrations.</field>
+            <field name="lawful_basis">contract</field>
+            <field name="retention_period">10 years (statutory record retention)</field>
+            <field name="sharing_recipients">Receita Federal (CNPJ updates), Cartório (registrations)</field>
+            <field name="international_transfer">False</field>
+            <field name="module_origin">usbea_rbac</field>
+        </record>
+
+        <record id="processing_program_participant" model="usbea.lgpd.processing_log">
+            <field name="name">Program participant data</field>
+            <field name="data_class">Participant identity, program enrollment, visa status, outcomes</field>
+            <field name="purpose">Program administration and impact reporting to funders.</field>
+            <field name="lawful_basis">contract</field>
+            <field name="retention_period">10 years post program completion</field>
+            <field name="sharing_recipients">Embassy/funder (program reports — aggregated, anonymized where possible)</field>
+            <field name="international_transfer">False</field>
+            <field name="module_origin">usbea_programs</field>
+        </record>
+
+        <record id="processing_ai_prompts" model="usbea.lgpd.processing_log">
+            <field name="name">Personal data in AI prompts</field>
+            <field name="data_class">Any PII appearing in free-form fields sent to LLM provider</field>
+            <field name="purpose">Powering AI assists (task prioritization, donor segmentation, grant writing, etc.).</field>
+            <field name="lawful_basis">legitimate_interest</field>
+            <field name="retention_period">365 days (configurable per usbea_ai.audit_retention_days)</field>
+            <field name="sharing_recipients">Anthropic (Claude API) — PII redacted to deterministic placeholders before transfer</field>
+            <field name="international_transfer">True</field>
+            <field name="transfer_safeguards">LGPDRedactor (CPF/CNPJ/PIX/phone/email/CEP/bank). Raw PII never crosses the border; placeholders only. Per-suggestion audit log allows DSAR aggregation.</field>
+            <field name="module_origin">usbea_ai</field>
+        </record>
+
+    </data>
+</odoo>
