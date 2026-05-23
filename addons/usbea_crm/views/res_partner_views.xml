@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_form_usbea" model="ir.ui.view">
+        <field name="name">res.partner.form.usbea</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <notebook position="inside">
+                    <page string="USBEA" groups="usbea_crm.group_usbea_crm_user">
+                        <group>
+                            <group>
+                                <field name="usbea_archetype"/>
+                                <field name="cultivation_stage"/>
+                                <field name="has_active_lgpd_consent" readonly="1"/>
+                                <button name="action_open_create_consent" type="object"
+                                        string="Record LGPD consent"
+                                        class="btn-secondary"
+                                        invisible="has_active_lgpd_consent"/>
+                            </group>
+                            <group>
+                                <field name="engagement_score" readonly="1"/>
+                                <field name="engagement_score_updated_at" readonly="1"/>
+                            </group>
+                        </group>
+                        <field name="soft_credit_partner_ids" widget="many2many_tags"/>
+                        <notebook>
+                            <page string="Cultivation moves">
+                                <field name="cultivation_move_ids"
+                                       context="{'default_partner_id': active_id}">
+                                    <list editable="bottom">
+                                        <field name="occurred_on"/>
+                                        <field name="move_type"/>
+                                        <field name="summary"/>
+                                        <field name="moved_to_stage"/>
+                                        <field name="amount_discussed"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="next_move_due"/>
+                                        <field name="assigned_user_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Engagement events">
+                                <field name="engagement_event_ids"
+                                       context="{'default_partner_id': active_id}">
+                                    <list editable="bottom">
+                                        <field name="when"/>
+                                        <field name="event_type"/>
+                                        <field name="source"/>
+                                        <field name="notes"/>
+                                        <field name="score_delta_override"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_partner_search_usbea" model="ir.ui.view">
+        <field name="name">res.partner.search.usbea</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <field name="usbea_archetype"/>
+                <field name="cultivation_stage"/>
+                <filter name="donors" string="Donors" domain="[('usbea_archetype', '=', 'donor')]"/>
+                <filter name="funders" string="Funders" domain="[('usbea_archetype', '=', 'funder')]"/>
+                <filter name="high_engagement" string="High engagement (≥70)" domain="[('engagement_score', '>=', 70)]"/>
+                <filter name="no_consent" string="Missing LGPD consent" domain="[('usbea_archetype', '!=', False), ('has_active_lgpd_consent', '=', False)]"/>
+                <group expand="0" string="Group by">
+                    <filter name="group_archetype" string="Archetype" context="{'group_by': 'usbea_archetype'}"/>
+                    <filter name="group_stage" string="Cultivation stage" context="{'group_by': 'cultivation_stage'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

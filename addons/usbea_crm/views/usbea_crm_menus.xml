@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_usbea_crm_root"
+              name="USBEA CRM"
+              sequence="50"
+              groups="usbea_crm.group_usbea_crm_user"
+              web_icon="usbea_crm,static/description/icon.png"/>
+
+    <menuitem id="menu_usbea_crm_partners"
+              name="Donors &amp; Funders"
+              parent="menu_usbea_crm_root"
+              action="base.action_partner_form"
+              sequence="10"/>
+
+    <menuitem id="menu_usbea_crm_moves"
+              name="Cultivation moves"
+              parent="menu_usbea_crm_root"
+              action="action_cultivation_move"
+              sequence="20"/>
+
+    <menuitem id="menu_usbea_crm_engagement"
+              name="Engagement events"
+              parent="menu_usbea_crm_root"
+              action="action_engagement_event"
+              sequence="30"
+              groups="usbea_crm.group_usbea_crm_manager"/>
+</odoo>

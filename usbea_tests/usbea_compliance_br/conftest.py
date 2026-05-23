@@ -1,4 +1,4 @@
-"""Conftest: mount usbea_tasks utility file under unique module name."""
+"""Conftest: mount usbea_compliance_br utility file under unique module name."""
 
 from __future__ import annotations
 
@@ -8,10 +8,8 @@ import types
 from pathlib import Path
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-_ADDON_DIR = _REPO_ROOT / "addons" / "usbea_tasks"
+_ADDON_DIR = _REPO_ROOT / "addons" / "usbea_compliance_br"
 
-# Shared "utils" namespace per test scope — each addon mounts its own submodules
-# under unique submodule names, avoiding cross-test contamination.
 _utils_pkg = sys.modules.setdefault("utils", types.ModuleType("utils"))
 
 
@@ -22,5 +20,5 @@ def _mount(file_rel: str, module_name: str) -> None:
     spec.loader.exec_module(module)
 
 
-_mount("utils/ai_parsing.py", "utils.ai_parsing")
-_utils_pkg.ai_parsing = sys.modules["utils.ai_parsing"]
+_mount("utils/dsar_sla.py", "utils.dsar_sla")
+_utils_pkg.dsar_sla = sys.modules["utils.dsar_sla"]

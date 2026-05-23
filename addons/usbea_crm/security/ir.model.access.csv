@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cultivation_move_user,usbea.cultivation.move.user,model_usbea_cultivation_move,group_usbea_crm_user,1,1,1,0
+access_cultivation_move_manager,usbea.cultivation.move.manager,model_usbea_cultivation_move,group_usbea_crm_manager,1,1,1,1
+access_engagement_event_user,usbea.engagement.event.user,model_usbea_engagement_event,group_usbea_crm_user,1,1,1,0
+access_engagement_event_manager,usbea.engagement.event.manager,model_usbea_engagement_event,group_usbea_crm_manager,1,1,1,1

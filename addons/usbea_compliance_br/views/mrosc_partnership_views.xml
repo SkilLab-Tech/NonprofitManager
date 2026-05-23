@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrosc_partnership_list" model="ir.ui.view">
+        <field name="name">usbea.mrosc.partnership.list</field>
+        <field name="model">usbea.mrosc.partnership</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="partnership_type"/>
+                <field name="instrumento_juridico_ref"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_value_brl" widget="monetary"/>
+                <field name="prestacao_contas_state"/>
+                <field name="transparency_published" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrosc_partnership_form" model="ir.ui.view">
+        <field name="name">usbea.mrosc.partnership.form</field>
+        <field name="model">usbea.mrosc.partnership</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="partnership_type"/>
+                            <field name="instrumento_juridico_ref"/>
+                            <field name="chamamento_publico_ref"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="total_value_brl"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="prestacao_contas_state"/>
+                            <field name="prestacao_contas_due_date"/>
+                            <field name="transparency_published"/>
+                        </group>
+                    </group>
+                    <field name="object_description"/>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mrosc_partnership" model="ir.actions.act_window">
+        <field name="name">MROSC Partnerships</field>
+        <field name="res_model">usbea.mrosc.partnership</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

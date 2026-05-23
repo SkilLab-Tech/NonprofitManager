@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lgpd_consent_officer,usbea.lgpd.consent.officer,model_usbea_lgpd_consent,group_compliance_br_officer,1,1,1,0
+access_lgpd_consent_manager,usbea.lgpd.consent.manager,model_usbea_lgpd_consent,group_compliance_br_manager,1,1,1,1
+access_lgpd_dsar_officer,usbea.lgpd.dsar.officer,model_usbea_lgpd_dsar,group_compliance_br_officer,1,1,1,0
+access_lgpd_dsar_manager,usbea.lgpd.dsar.manager,model_usbea_lgpd_dsar,group_compliance_br_manager,1,1,1,1
+access_lgpd_processing_log_officer,usbea.lgpd.processing_log.officer,model_usbea_lgpd_processing_log,group_compliance_br_officer,1,0,0,0
+access_lgpd_processing_log_manager,usbea.lgpd.processing_log.manager,model_usbea_lgpd_processing_log,group_compliance_br_manager,1,1,1,1
+access_mrosc_officer,usbea.mrosc.partnership.officer,model_usbea_mrosc_partnership,group_compliance_br_officer,1,1,1,0
+access_mrosc_manager,usbea.mrosc.partnership.manager,model_usbea_mrosc_partnership,group_compliance_br_manager,1,1,1,1
+access_oscip_status_officer,usbea.oscip.status.officer,model_usbea_oscip_status,group_compliance_br_officer,1,0,0,0
+access_oscip_status_manager,usbea.oscip.status.manager,model_usbea_oscip_status,group_compliance_br_manager,1,1,1,1
+access_oscip_finality_officer,usbea.oscip.finality.officer,model_usbea_oscip_finality,group_compliance_br_officer,1,0,0,0
+access_oscip_finality_manager,usbea.oscip.finality.manager,model_usbea_oscip_finality,group_compliance_br_manager,1,1,1,1
+access_receita_dirf_officer,usbea.receita.dirf_line.officer,model_usbea_receita_dirf_line,group_compliance_br_officer,1,1,1,0
+access_receita_dirf_manager,usbea.receita.dirf_line.manager,model_usbea_receita_dirf_line,group_compliance_br_manager,1,1,1,1

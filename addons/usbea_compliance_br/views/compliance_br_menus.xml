@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_usbea_compliance_br_root"
+              name="USBEA Compliance"
+              sequence="80"
+              groups="usbea_compliance_br.group_compliance_br_officer"
+              web_icon="usbea_compliance_br,static/description/icon.png"/>
+
+    <menuitem id="menu_lgpd_section"
+              name="LGPD"
+              parent="menu_usbea_compliance_br_root"
+              sequence="10"/>
+
+    <menuitem id="menu_lgpd_consents"
+              name="Consents"
+              parent="menu_lgpd_section"
+              action="action_lgpd_consent"
+              sequence="10"/>
+
+    <menuitem id="menu_lgpd_dsar"
+              name="DSARs"
+              parent="menu_lgpd_section"
+              action="action_lgpd_dsar"
+              sequence="20"/>
+
+    <menuitem id="menu_lgpd_processing_log"
+              name="Processing log"
+              parent="menu_lgpd_section"
+              action="action_lgpd_processing_log"
+              sequence="30"
+              groups="usbea_compliance_br.group_compliance_br_manager"/>
+
+    <menuitem id="menu_mrosc"
+              name="MROSC Partnerships"
+              parent="menu_usbea_compliance_br_root"
+              action="action_mrosc_partnership"
+              sequence="20"/>
+
+    <menuitem id="menu_oscip"
+              name="OSCIP Status"
+              parent="menu_usbea_compliance_br_root"
+              action="action_oscip_status"
+              sequence="30"
+              groups="usbea_compliance_br.group_compliance_br_manager"/>
+</odoo>
