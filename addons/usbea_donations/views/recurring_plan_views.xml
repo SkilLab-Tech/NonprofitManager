@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recurring_plan_list" model="ir.ui.view">
+        <field name="name">usbea.donation.recurring_plan.list</field>
+        <field name="model">usbea.donation.recurring_plan</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'" decoration-warning="state == 'paused'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="donor_partner_id"/>
+                <field name="amount"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="frequency"/>
+                <field name="rail"/>
+                <field name="state"/>
+                <field name="next_charge_date"/>
+                <field name="donation_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_recurring_plan_form" model="ir.ui.view">
+        <field name="name">usbea.donation.recurring_plan.form</field>
+        <field name="model">usbea.donation.recurring_plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activate" class="btn-primary" invisible="state == 'active'"/>
+                    <button name="action_pause" type="object" string="Pause" invisible="state != 'active'"/>
+                    <button name="action_resume" type="object" string="Resume" invisible="state != 'paused'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state == 'cancelled'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1><field name="name" readonly="1"/></h1>
+                    <group>
+                        <group>
+                            <field name="donor_partner_id"/>
+                            <field name="amount"/>
+                            <field name="currency_id"/>
+                            <field name="frequency"/>
+                            <field name="rail"/>
+                        </group>
+                        <group>
+                            <field name="external_subscription_id" readonly="1"/>
+                            <field name="started_at"/>
+                            <field name="next_charge_date"/>
+                            <field name="cancelled_at" readonly="1"/>
+                            <field name="donation_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                    <notebook>
+                        <page string="Donations on this plan">
+                            <field name="donation_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recurring_plan" model="ir.actions.act_window">
+        <field name="name">Recurring Plans</field>
+        <field name="res_model">usbea.donation.recurring_plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

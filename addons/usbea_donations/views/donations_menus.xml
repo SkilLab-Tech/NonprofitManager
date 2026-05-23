@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_donations_root" name="USBEA Donations" sequence="52" groups="usbea_donations.group_donations_user"/>
+
+    <menuitem id="menu_donations_donations" parent="menu_donations_root" name="Donations" action="action_donation" sequence="10"/>
+    <menuitem id="menu_donations_recurring" parent="menu_donations_root" name="Recurring plans" action="action_recurring_plan" sequence="20"/>
+    <menuitem id="menu_donations_p2p" parent="menu_donations_root" name="P2P campaigns" action="action_p2p_campaign" sequence="30"/>
+    <menuitem id="menu_donations_templates" parent="menu_donations_root" name="Receipt templates" action="action_receipt_template" sequence="90" groups="usbea_donations.group_donations_manager"/>
+</odoo>

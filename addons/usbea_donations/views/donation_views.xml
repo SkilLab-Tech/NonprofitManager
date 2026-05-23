@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_donation_list" model="ir.ui.view">
+        <field name="name">usbea.donation.list</field>
+        <field name="model">usbea.donation</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'confirmed'" decoration-muted="state in ('refunded', 'failed')" decoration-info="state == 'pending'">
+                <field name="name"/>
+                <field name="donor_partner_id"/>
+                <field name="donor_doc"/>
+                <field name="amount"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="donation_date"/>
+                <field name="payment_method"/>
+                <field name="rail"/>
+                <field name="state"/>
+                <field name="receipt_issued" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_donation_kanban" model="ir.ui.view">
+        <field name="name">usbea.donation.kanban</field>
+        <field name="model">usbea.donation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="donor_partner_id"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="rail"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="donor_partner_id"/></div>
+                            <div><field name="amount"/> <field name="currency_id"/></div>
+                            <div>Rail: <field name="rail"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_donation_form" model="ir.ui.view">
+        <field name="name">usbea.donation.form</field>
+        <field name="model">usbea.donation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" invisible="state != 'pending'"/>
+                    <button name="action_fail" type="object" string="Mark failed" invisible="state != 'pending'"/>
+                    <button name="action_refund" type="object" string="Refund" invisible="state != 'confirmed'" groups="usbea_donations.group_donations_manager"/>
+                    <button name="action_issue_receipt" type="object" string="Issue IRPF receipt" class="btn-info" invisible="state != 'confirmed' or receipt_issued"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="donor_partner_id"/>
+                            <field name="donor_doc"/>
+                            <field name="amount"/>
+                            <field name="currency_id"/>
+                            <field name="donation_date"/>
+                        </group>
+                        <group>
+                            <field name="payment_method"/>
+                            <field name="rail"/>
+                            <field name="external_ref"/>
+                            <field name="recurring_plan_id"/>
+                            <field name="p2p_campaign_id"/>
+                        </group>
+                    </group>
+                    <group string="Receipt">
+                        <field name="receipt_template_id"/>
+                        <field name="receipt_issued" readonly="1"/>
+                        <field name="receipt_issued_at" readonly="1"/>
+                        <field name="receipt_pdf" filename="receipt_pdf_name" invisible="not receipt_pdf"/>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_donation" model="ir.actions.act_window">
+        <field name="name">Donations</field>
+        <field name="res_model">usbea.donation</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+</odoo>

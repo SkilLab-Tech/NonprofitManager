@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="processing_donation_records" model="usbea.lgpd.processing_log">
+            <field name="name">Donation records and recurring plans</field>
+            <field name="data_class">Donor CPF/CNPJ, amount, payment method, donation date, accounting reference</field>
+            <field name="purpose">Issue IRPF receipts, reconcile accounting, maintain donor history for stewardship, comply with Receita Federal 5-year retention.</field>
+            <field name="lawful_basis">legal_obligation</field>
+            <field name="retention_period">5 years post last donation (Receita Federal requirement)</field>
+            <field name="sharing_recipients">Doare (PIX rail) and Mercado Pago (cards) — payment processors only. No further sharing.</field>
+            <field name="international_transfer">False</field>
+            <field name="module_origin">usbea_donations</field>
+        </record>
+    </data>
+</odoo>

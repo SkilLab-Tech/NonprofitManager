@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_donation_user,usbea.donation.user,model_usbea_donation,group_donations_user,1,1,1,0
+access_donation_manager,usbea.donation.manager,model_usbea_donation,group_donations_manager,1,1,1,1
+access_recurring_plan_user,usbea.donation.recurring_plan.user,model_usbea_donation_recurring_plan,group_donations_user,1,1,1,0
+access_recurring_plan_manager,usbea.donation.recurring_plan.manager,model_usbea_donation_recurring_plan,group_donations_manager,1,1,1,1
+access_p2p_campaign_user,usbea.donation.p2p_campaign.user,model_usbea_donation_p2p_campaign,group_donations_user,1,1,1,0
+access_p2p_campaign_manager,usbea.donation.p2p_campaign.manager,model_usbea_donation_p2p_campaign,group_donations_manager,1,1,1,1
+access_receipt_template_user,usbea.donation.receipt_template.user,model_usbea_donation_receipt_template,group_donations_user,1,0,0,0
+access_receipt_template_manager,usbea.donation.receipt_template.manager,model_usbea_donation_receipt_template,group_donations_manager,1,1,1,1

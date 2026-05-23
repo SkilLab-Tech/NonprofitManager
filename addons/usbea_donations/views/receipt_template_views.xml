@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_receipt_template_list" model="ir.ui.view">
+        <field name="name">usbea.donation.receipt_template.list</field>
+        <field name="model">usbea.donation.receipt_template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="technical_key"/>
+                <field name="oscip_article_ref"/>
+                <field name="locale"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_receipt_template_form" model="ir.ui.view">
+        <field name="name">usbea.donation.receipt_template.form</field>
+        <field name="model">usbea.donation.receipt_template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="technical_key"/>
+                            <field name="locale"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="org_cnpj_field"/>
+                            <field name="oscip_article_ref"/>
+                            <field name="irpf_article_ref"/>
+                        </group>
+                    </group>
+                    <field name="footer_text"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_receipt_template" model="ir.actions.act_window">
+        <field name="name">Receipt Templates</field>
+        <field name="res_model">usbea.donation.receipt_template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
