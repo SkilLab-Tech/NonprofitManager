@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Participant Form View -->
+    <record id="view_participant_form" model="ir.ui.view">
+        <field name="name">usbea.participant.form</field>
+        <field name="model">usbea.participant</field>
+        <field name="arch" type="xml">
+            <form string="Participant">
+                <header>
+                    <button name="action_accept" string="Accept"
+                            type="object" class="btn-primary"
+                            invisible="state != 'applied'"
+                            groups="usbea_programs.group_program_manager"/>
+                    <button name="action_activate" string="Activate"
+                            type="object" class="btn-primary"
+                            invisible="state != 'accepted'"
+                            groups="usbea_programs.group_program_manager"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-success"
+                            invisible="state != 'active'"
+                            groups="usbea_programs.group_program_manager"/>
+                    <button name="action_withdraw" string="Withdraw"
+                            type="object"
+                            invisible="state in ('completed', 'withdrawn')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="applied,accepted,active,completed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Personal Information">
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="date_of_birth"/>
+                            <field name="nationality"/>
+                            <field name="city"/>
+                        </group>
+                        <group string="Program Details">
+                            <field name="program_id"/>
+                            <field name="role"/>
+                            <field name="arrival_date"/>
+                            <field name="departure_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Visa Information">
+                            <field name="visa_status"/>
+                            <field name="visa_number"/>
+                            <field name="visa_expiry"/>
+                            <field name="passport_number"/>
+                            <field name="ds2019_number"/>
+                        </group>
+                        <group string="Emergency Contact">
+                            <field name="emergency_contact"/>
+                            <field name="emergency_phone"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Participant List View -->
+    <record id="view_participant_list" model="ir.ui.view">
+        <field name="name">usbea.participant.list</field>
+        <field name="model">usbea.participant</field>
+        <field name="arch" type="xml">
+            <list string="Participants"
+                  decoration-success="state in ('active', 'completed')"
+                  decoration-danger="state == 'withdrawn'">
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="email"/>
+                <field name="role"/>
+                <field name="visa_status" widget="badge"/>
+                <field name="arrival_date"/>
+                <field name="departure_date"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('applied', 'accepted')"
+                       decoration-success="state in ('active', 'completed')"
+                       decoration-danger="state == 'withdrawn'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Participant Search View -->
+    <record id="view_participant_search" model="ir.ui.view">
+        <field name="name">usbea.participant.search</field>
+        <field name="model">usbea.participant</field>
+        <field name="arch" type="xml">
+            <search string="Search Participants">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="program_id"/>
+                <filter string="Active" name="active_participants"
+                        domain="[('state', '=', 'active')]"/>
+                <filter string="Visa Pending" name="visa_pending"
+                        domain="[('visa_status', 'in', ('pending', 'applied', 'interview'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Program" name="group_program"
+                            context="{'group_by': 'program_id'}"/>
+                    <filter string="Visa Status" name="group_visa"
+                            context="{'group_by': 'visa_status'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Participant Action -->
+    <record id="action_participant" model="ir.actions.act_window">
+        <field name="name">Participants</field>
+        <field name="res_model">usbea.participant</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_participant_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a program participant
+            </p>
+        </field>
+    </record>
+</odoo>

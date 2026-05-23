@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Board Dashboard Sub-menu -->
+    <menuitem id="menu_board_root"
+              name="Board Dashboard"
+              parent="usbea_rbac.menu_usbea_root"
+              sequence="5"
+              groups="usbea_grants.group_board_member"/>
+
+    <menuitem id="menu_board_portfolio"
+              name="Grant Portfolio"
+              parent="menu_board_root"
+              action="action_board_grant_portfolio"
+              sequence="10"/>
+
+    <menuitem id="menu_board_financials"
+              name="Financial Summary"
+              parent="menu_board_root"
+              action="action_board_financial_summary"
+              sequence="20"/>
+
+    <menuitem id="menu_board_programs"
+              name="Programs Overview"
+              parent="menu_board_root"
+              action="action_board_programs"
+              sequence="30"/>
+
+    <menuitem id="menu_board_compliance"
+              name="Compliance Calendar"
+              parent="menu_board_root"
+              action="action_board_compliance_calendar"
+              sequence="40"/>
+</odoo>

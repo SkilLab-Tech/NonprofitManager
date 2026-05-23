@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Root USBEA Menu (owned by RBAC module)       -->
+    <!-- ============================================ -->
+    <menuitem id="menu_usbea_root"
+              name="USBEA"
+              web_icon="usbea_rbac,static/description/icon.png"
+              sequence="200"/>
+
+    <!-- ============================================ -->
+    <!-- Platform Administration Menu                 -->
+    <!-- (Visible to Org Admins and above)            -->
+    <!-- ============================================ -->
+
+    <menuitem id="menu_platform_admin"
+              name="Platform Admin"
+              parent="menu_usbea_root"
+              sequence="90"
+              groups="usbea_rbac.group_platform_org_admin"/>
+
+    <!-- User Management -->
+    <menuitem id="menu_user_management"
+              name="User Management"
+              parent="menu_platform_admin"
+              sequence="10"/>
+
+    <menuitem id="menu_platform_users"
+              name="Users"
+              parent="menu_user_management"
+              action="action_platform_users"
+              sequence="10"/>
+
+    <menuitem id="menu_invitations"
+              name="Invitations"
+              parent="menu_user_management"
+              action="action_invitations"
+              sequence="20"/>
+
+    <menuitem id="menu_invite_user"
+              name="Invite User"
+              parent="menu_user_management"
+              action="action_invite_user_wizard"
+              sequence="30"/>
+
+    <!-- Roles -->
+    <menuitem id="menu_access_control"
+              name="Access Control"
+              parent="menu_platform_admin"
+              sequence="20"/>
+
+    <menuitem id="menu_custom_roles"
+              name="Custom Roles"
+              parent="menu_access_control"
+              action="action_platform_roles"
+              sequence="10"/>
+
+    <!-- Organizations (Super Admin only) -->
+    <menuitem id="menu_organizations"
+              name="Organizations"
+              parent="menu_platform_admin"
+              action="action_manage_organizations"
+              sequence="30"
+              groups="usbea_rbac.group_platform_super_admin"/>
+</odoo>

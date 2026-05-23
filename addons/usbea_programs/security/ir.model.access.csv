@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_program_user,usbea.program.user,model_usbea_program,usbea_programs.group_program_user,1,0,0,0
+access_program_manager,usbea.program.manager,model_usbea_program,usbea_programs.group_program_manager,1,1,1,1
+access_program_board,usbea.program.board,model_usbea_program,usbea_grants.group_board_member,1,0,0,0
+access_participant_user,usbea.participant.user,model_usbea_participant,usbea_programs.group_program_user,1,1,1,0
+access_participant_manager,usbea.participant.manager,model_usbea_participant,usbea_programs.group_program_manager,1,1,1,1
+access_participant_board,usbea.participant.board,model_usbea_participant,usbea_grants.group_board_member,1,0,0,0
+access_event_user,usbea.program.event.user,model_usbea_program_event,usbea_programs.group_program_user,1,1,1,0
+access_event_manager,usbea.program.event.manager,model_usbea_program_event,usbea_programs.group_program_manager,1,1,1,1
+access_event_board,usbea.program.event.board,model_usbea_program_event,usbea_grants.group_board_member,1,0,0,0

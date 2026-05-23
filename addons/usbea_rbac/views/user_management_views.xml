@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- User Management Views                        -->
+    <!-- ============================================ -->
+
+    <!-- Extend res.users form with platform role fields -->
+    <record id="view_users_form_inherit_rbac" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.usbea.rbac</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='login']" position="after">
+                <field name="platform_role"
+                       groups="usbea_rbac.group_platform_org_admin"/>
+                <field name="is_super_admin" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='preferences']" position="after">
+                <page string="Platform Profile" name="platform_profile">
+                    <group>
+                        <group string="Profile Information">
+                            <field name="job_title_custom"/>
+                            <field name="department_custom"/>
+                            <field name="bio" placeholder="Tell us about yourself..."/>
+                        </group>
+                        <group string="Links">
+                            <field name="profile_website" widget="url"/>
+                            <field name="social_linkedin" widget="url"/>
+                            <field name="social_twitter" widget="url"/>
+                            <field name="social_github" widget="url"/>
+                        </group>
+                    </group>
+                    <group string="Invitation Details">
+                        <group>
+                            <field name="invited_by"/>
+                            <field name="invitation_date"/>
+                        </group>
+                    </group>
+                    <group string="Custom Roles"
+                           groups="usbea_rbac.group_platform_org_admin">
+                        <field name="role_ids" widget="many2many_tags" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- User list with platform role column -->
+    <record id="view_users_list_rbac" model="ir.ui.view">
+        <field name="name">res.users.list.usbea.rbac</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <list string="Platform Users"
+                  decoration-info="platform_role == 'super_admin'"
+                  decoration-success="platform_role in ('org_admin', 'org_manager')">
+                <field name="name"/>
+                <field name="login"/>
+                <field name="platform_role" widget="badge"
+                       decoration-info="platform_role == 'super_admin'"
+                       decoration-success="platform_role in ('org_admin', 'org_manager')"
+                       decoration-warning="platform_role == 'org_member'"
+                       decoration-danger="platform_role == 'org_viewer'"/>
+                <field name="role_ids" widget="many2many_tags"/>
+                <field name="company_id"/>
+                <field name="invited_by"/>
+                <field name="login_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- User search with role filters -->
+    <record id="view_users_search_rbac" model="ir.ui.view">
+        <field name="name">res.users.search.usbea.rbac</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <search string="Search Users">
+                <field name="name"/>
+                <field name="login"/>
+                <field name="platform_role"/>
+                <filter string="Super Admins" name="super_admins"
+                        domain="[('platform_role', '=', 'super_admin')]"/>
+                <filter string="Org Admins" name="org_admins"
+                        domain="[('platform_role', '=', 'org_admin')]"/>
+                <filter string="Managers" name="managers"
+                        domain="[('platform_role', '=', 'org_manager')]"/>
+                <filter string="Members" name="members"
+                        domain="[('platform_role', '=', 'org_member')]"/>
+                <filter string="Viewers" name="viewers"
+                        domain="[('platform_role', '=', 'org_viewer')]"/>
+                <separator/>
+                <filter string="Active Users" name="active_users"
+                        domain="[('active', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Platform Role" name="group_role"
+                            context="{'group_by': 'platform_role'}"/>
+                    <filter string="Organization" name="group_company"
+                            context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Platform User Management Action -->
+    <record id="action_platform_users" model="ir.actions.act_window">
+        <field name="name">Platform Users</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_users_search_rbac"/>
+        <field name="context">{'search_default_active_users': 1}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_users_list_rbac')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No users found
+            </p>
+            <p>
+                Use the "Invite User" button to add people to your organization.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Invitation Management Views                  -->
+    <!-- ============================================ -->
+
+    <!-- Invitation Form View -->
+    <record id="view_invitation_form" model="ir.ui.view">
+        <field name="name">usbea.user.invitation.form</field>
+        <field name="model">usbea.user.invitation</field>
+        <field name="arch" type="xml">
+            <form string="User Invitation">
+                <header>
+                    <button name="action_send" string="Send Invitation"
+                            type="object" class="btn-primary"
+                            invisible="state != 'pending'"/>
+                    <button name="action_accept" string="Accept (Manual)"
+                            type="object" class="btn-success"
+                            invisible="state not in ('pending', 'sent')"
+                            groups="usbea_rbac.group_platform_org_admin"/>
+                    <button name="action_resend" string="Resend"
+                            type="object"
+                            invisible="state not in ('sent', 'expired')"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('accepted', 'cancelled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,sent,accepted"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Invitation Details">
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="organization_id"
+                                   groups="usbea_rbac.group_platform_super_admin"/>
+                            <field name="invited_by"/>
+                        </group>
+                        <group string="Access">
+                            <field name="platform_role"/>
+                            <field name="role_ids" widget="many2many_tags"/>
+                            <field name="expiry_date"/>
+                            <field name="token" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Result" invisible="state != 'accepted'">
+                            <field name="user_id"/>
+                            <field name="accepted_date"/>
+                        </group>
+                    </group>
+                    <group string="Personal Message">
+                        <field name="message" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Invitation List View -->
+    <record id="view_invitation_list" model="ir.ui.view">
+        <field name="name">usbea.user.invitation.list</field>
+        <field name="model">usbea.user.invitation</field>
+        <field name="arch" type="xml">
+            <list string="Invitations"
+                  decoration-success="state == 'accepted'"
+                  decoration-muted="state in ('expired', 'cancelled')">
+                <field name="email"/>
+                <field name="name"/>
+                <field name="organization_id"
+                       groups="usbea_rbac.group_platform_super_admin"/>
+                <field name="platform_role" widget="badge"/>
+                <field name="invited_by"/>
+                <field name="expiry_date"/>
+                <field name="user_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('pending', 'sent')"
+                       decoration-success="state == 'accepted'"
+                       decoration-warning="state == 'expired'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Invitation Search -->
+    <record id="view_invitation_search" model="ir.ui.view">
+        <field name="name">usbea.user.invitation.search</field>
+        <field name="model">usbea.user.invitation</field>
+        <field name="arch" type="xml">
+            <search string="Search Invitations">
+                <field name="email"/>
+                <field name="name"/>
+                <field name="organization_id"/>
+                <filter string="Pending" name="pending"
+                        domain="[('state', 'in', ('pending', 'sent'))]"/>
+                <filter string="Accepted" name="accepted"
+                        domain="[('state', '=', 'accepted')]"/>
+                <filter string="Expired" name="expired"
+                        domain="[('state', '=', 'expired')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Organization" name="group_org"
+                            context="{'group_by': 'organization_id'}"/>
+                    <filter string="Role" name="group_role"
+                            context="{'group_by': 'platform_role'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Invitation Action -->
+    <record id="action_invitations" model="ir.actions.act_window">
+        <field name="name">Invitations</field>
+        <field name="res_model">usbea.user.invitation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_invitation_search"/>
+        <field name="context">{'search_default_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Invite someone to your organization
+            </p>
+            <p>
+                Send email invitations to users. They'll receive a link to
+                join your organization with the assigned role.
+            </p>
+        </field>
+    </record>
+</odoo>

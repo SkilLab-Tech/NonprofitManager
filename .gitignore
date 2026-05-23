@@ -9,6 +9,7 @@ _build/
 !.mailmap
 !.weblate.json
 !.pre-commit-config.yaml
+!.env.example
 # compiled python files
 *.py[co]
 __pycache__/
@@ -23,8 +24,8 @@ status
 odoo/filestore
 # maintenance migration scripts
 odoo/addons/base/maintenance
-# windows installation config file
-/odoo.conf
+# windows installation config file (allow deploy config)
+/odoo.conf.local
 
 # generated for windows installer?
 install/win32/*.bat

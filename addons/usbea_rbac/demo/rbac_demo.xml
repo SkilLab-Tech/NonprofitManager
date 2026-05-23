@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Organization 2: Another nonprofit using the platform -->
+        <record id="org_amazon_conservation" model="res.company">
+            <field name="name">Amazon Conservation Alliance</field>
+            <field name="organization_type">nonprofit</field>
+            <field name="organization_size">medium</field>
+            <field name="subscription_status">active</field>
+            <field name="subscription_plan">professional</field>
+            <field name="mission_statement">Protecting the Amazon rainforest through community partnerships and sustainable development.</field>
+            <field name="founded_year">2012</field>
+            <field name="support_email">info@amazonconservation.org</field>
+            <field name="public_website">https://amazonconservation.org</field>
+            <field name="social_instagram">https://instagram.com/amazonconservation</field>
+            <field name="created_by_super_admin" ref="base.user_admin"/>
+            <field name="country_id" ref="base.br"/>
+        </record>
+
+        <!-- Demo Organization 3: Corporate tenant -->
+        <record id="org_tech_education" model="res.company">
+            <field name="name">TechBridge Education Foundation</field>
+            <field name="organization_type">educational</field>
+            <field name="organization_size">small</field>
+            <field name="subscription_status">trial</field>
+            <field name="subscription_plan">starter</field>
+            <field name="mission_statement">Bridging the digital divide through technology education in underserved communities.</field>
+            <field name="founded_year">2020</field>
+            <field name="support_email">admin@techbridge.edu</field>
+            <field name="public_website">https://techbridge.edu</field>
+            <field name="social_linkedin">https://linkedin.com/company/techbridge</field>
+            <field name="created_by_super_admin" ref="base.user_admin"/>
+            <field name="country_id" ref="base.br"/>
+        </record>
+
+        <!-- Demo user: Org admin for USBEA -->
+        <record id="user_org_admin_maria" model="res.users">
+            <field name="name">Maria Santos</field>
+            <field name="login">maria@usbea.org</field>
+            <field name="email">maria@usbea.org</field>
+            <field name="platform_role">org_admin</field>
+            <field name="bio">Executive Director of USBEA Brasil. 15 years of experience in nonprofit management and US-Brazil relations.</field>
+            <field name="job_title_custom">Executive Director</field>
+            <field name="department_custom">Executive Office</field>
+            <field name="social_linkedin">https://linkedin.com/in/mariasantos</field>
+            <field name="groups_id" eval="[(4, ref('usbea_rbac.group_platform_org_admin'))]"/>
+        </record>
+
+        <!-- Demo user: Org manager -->
+        <record id="user_org_manager_carlos" model="res.users">
+            <field name="name">Carlos Ferreira</field>
+            <field name="login">carlos@usbea.org</field>
+            <field name="email">carlos@usbea.org</field>
+            <field name="platform_role">org_manager</field>
+            <field name="bio">Program Director overseeing all exchange programs and alumni engagement initiatives.</field>
+            <field name="job_title_custom">Program Director</field>
+            <field name="department_custom">Programs</field>
+            <field name="groups_id" eval="[(4, ref('usbea_rbac.group_platform_org_manager'))]"/>
+            <field name="role_ids" eval="[(4, ref('role_default_program_coordinator'))]"/>
+        </record>
+
+        <!-- Demo user: Org member (finance) -->
+        <record id="user_member_ana" model="res.users">
+            <field name="name">Ana Rodrigues</field>
+            <field name="login">ana@usbea.org</field>
+            <field name="email">ana@usbea.org</field>
+            <field name="platform_role">org_member</field>
+            <field name="bio">Finance Manager handling grant budgets and compliance reporting.</field>
+            <field name="job_title_custom">Finance Manager</field>
+            <field name="department_custom">Finance</field>
+            <field name="groups_id" eval="[(4, ref('usbea_rbac.group_platform_org_member'))]"/>
+            <field name="role_ids" eval="[(4, ref('role_default_finance_officer'))]"/>
+        </record>
+
+        <!-- Demo user: Board viewer -->
+        <record id="user_viewer_john" model="res.users">
+            <field name="name">John Williams</field>
+            <field name="login">john@boardmember.com</field>
+            <field name="email">john@boardmember.com</field>
+            <field name="platform_role">org_viewer</field>
+            <field name="bio">Board Member. Former US Ambassador to Brazil. Chair of the Finance Committee.</field>
+            <field name="job_title_custom">Board Member</field>
+            <field name="social_linkedin">https://linkedin.com/in/johnwilliams</field>
+            <field name="groups_id" eval="[(4, ref('usbea_rbac.group_platform_org_viewer'))]"/>
+            <field name="role_ids" eval="[(4, ref('role_default_board_member'))]"/>
+        </record>
+
+        <!-- Demo invitation (pending) -->
+        <record id="invitation_demo_pending" model="usbea.user.invitation">
+            <field name="email">newstaff@usbea.org</field>
+            <field name="name">Roberto Lima</field>
+            <field name="platform_role">org_member</field>
+            <field name="state">sent</field>
+            <field name="message">Welcome to USBEA! We've created an account for you as a new team member.</field>
+        </record>
+    </data>
+</odoo>

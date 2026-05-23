@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grant Budget Form View -->
+    <record id="view_grant_budget_form" model="ir.ui.view">
+        <field name="name">usbea.grant.budget.form</field>
+        <field name="model">usbea.grant.budget</field>
+        <field name="arch" type="xml">
+            <form string="Budget Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="grant_id"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="planned_amount"/>
+                            <field name="actual_amount"/>
+                            <field name="variance"/>
+                            <field name="variance_pct"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Grant Budget List View -->
+    <record id="view_grant_budget_list" model="ir.ui.view">
+        <field name="name">usbea.grant.budget.list</field>
+        <field name="model">usbea.grant.budget</field>
+        <field name="arch" type="xml">
+            <list string="Budget Lines"
+                  decoration-danger="variance &lt; 0">
+                <field name="sequence" widget="handle"/>
+                <field name="grant_id"/>
+                <field name="name"/>
+                <field name="planned_amount" sum="Total Planned"/>
+                <field name="actual_amount" sum="Total Actual"/>
+                <field name="variance" sum="Total Variance"/>
+                <field name="variance_pct"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Grant Budget Action -->
+    <record id="action_grant_budget" model="ir.actions.act_window">
+        <field name="name">Grant Budgets</field>
+        <field name="res_model">usbea.grant.budget</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create budget categories
+            </p>
+            <p>
+                Define budget categories for grants and track actual spending.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grant Disbursement Form View -->
+    <record id="view_grant_disbursement_form" model="ir.ui.view">
+        <field name="name">usbea.grant.disbursement.form</field>
+        <field name="model">usbea.grant.disbursement</field>
+        <field name="arch" type="xml">
+            <form string="Grant Disbursement">
+                <header>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-primary"
+                            invisible="state != 'pending'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state != 'pending'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,confirmed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Disbursement Details">
+                            <field name="name"/>
+                            <field name="grant_id"/>
+                            <field name="tranche_number"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Payment">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="payment_method"/>
+                            <field name="payment_reference"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Grant Disbursement List View -->
+    <record id="view_grant_disbursement_list" model="ir.ui.view">
+        <field name="name">usbea.grant.disbursement.list</field>
+        <field name="model">usbea.grant.disbursement</field>
+        <field name="arch" type="xml">
+            <list string="Disbursements"
+                  decoration-success="state == 'confirmed'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="grant_id"/>
+                <field name="tranche_number"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="payment_method"/>
+                <field name="payment_reference"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'pending'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Grant Disbursement Action -->
+    <record id="action_grant_disbursement" model="ir.actions.act_window">
+        <field name="name">Disbursements</field>
+        <field name="res_model">usbea.grant.disbursement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record a disbursement
+            </p>
+            <p>
+                Track payment tranches received from funders.
+            </p>
+        </field>
+    </record>
+</odoo>

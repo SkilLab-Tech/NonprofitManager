@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grant Expense Form View -->
+    <record id="view_grant_expense_form" model="ir.ui.view">
+        <field name="name">usbea.grant.expense.form</field>
+        <field name="model">usbea.grant.expense</field>
+        <field name="arch" type="xml">
+            <form string="Grant Expense">
+                <header>
+                    <button name="action_submit" string="Submit"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="btn-primary"
+                            invisible="state != 'submitted'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_reject" string="Reject"
+                            type="object" class="btn-danger"
+                            invisible="state != 'submitted'"
+                            groups="usbea_grants.group_grant_manager"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'rejected'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Expense Details">
+                            <field name="name"/>
+                            <field name="grant_id"/>
+                            <field name="category"/>
+                            <field name="budget_line_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Financial">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="requires_extra_approval"/>
+                            <field name="vendor"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Receipt">
+                            <field name="receipt" filename="receipt_filename"/>
+                            <field name="receipt_filename" invisible="1"/>
+                        </group>
+                        <group string="Approval">
+                            <field name="employee_id"/>
+                            <field name="approved_by"/>
+                            <field name="approval_date"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Grant Expense List View -->
+    <record id="view_grant_expense_list" model="ir.ui.view">
+        <field name="name">usbea.grant.expense.list</field>
+        <field name="model">usbea.grant.expense</field>
+        <field name="arch" type="xml">
+            <list string="Grant Expenses"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="grant_id"/>
+                <field name="category"/>
+                <field name="vendor"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="requires_extra_approval"/>
+                <field name="employee_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'submitted'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Grant Expense Search View -->
+    <record id="view_grant_expense_search" model="ir.ui.view">
+        <field name="name">usbea.grant.expense.search</field>
+        <field name="model">usbea.grant.expense</field>
+        <field name="arch" type="xml">
+            <search string="Search Expenses">
+                <field name="name"/>
+                <field name="grant_id"/>
+                <field name="vendor"/>
+                <filter string="My Expenses" name="my_expenses"
+                        domain="[('employee_id', '=', uid)]"/>
+                <filter string="Pending Approval" name="pending"
+                        domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="approved"
+                        domain="[('state', '=', 'approved')]"/>
+                <filter string="High Value (&gt;1000)" name="high_value"
+                        domain="[('requires_extra_approval', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Grant" name="group_grant"
+                            context="{'group_by': 'grant_id'}"/>
+                    <filter string="Category" name="group_category"
+                            context="{'group_by': 'category'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date"
+                            context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Grant Expense Action -->
+    <record id="action_grant_expense" model="ir.actions.act_window">
+        <field name="name">Grant Expenses</field>
+        <field name="res_model">usbea.grant.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_grant_expense_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record a grant expense
+            </p>
+            <p>
+                Track expenses charged against grants with approval workflow.
+            </p>
+        </field>
+    </record>
+</odoo>

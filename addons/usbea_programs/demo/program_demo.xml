@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Program 1: Active Cultural Exchange -->
+        <record id="program_cultural_2025" model="usbea.program">
+            <field name="name">US-Brazil Cultural Exchange 2025</field>
+            <field name="program_type">cultural_exchange</field>
+            <field name="start_date">2025-01-15</field>
+            <field name="end_date">2025-06-30</field>
+            <field name="visa_type">j1</field>
+            <field name="visa_sponsor">USBEA Brasil</field>
+            <field name="max_participants">50</field>
+            <field name="location">Sao Paulo / New York</field>
+            <field name="budget">125000.00</field>
+            <field name="state">active</field>
+            <field name="grant_ids" eval="[(4, ref('usbea_grants.grant_state_dept_2025'))]"/>
+            <field name="description">&lt;p&gt;Annual flagship cultural exchange program between Brazilian and American universities.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Participants for Program 1 -->
+        <record id="participant_ana" model="usbea.participant">
+            <field name="name">Ana Carolina Silva</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="email">ana.silva@email.com.br</field>
+            <field name="phone">+55 11 98765-4321</field>
+            <field name="nationality" ref="base.br"/>
+            <field name="city">Sao Paulo</field>
+            <field name="role">participant</field>
+            <field name="visa_status">issued</field>
+            <field name="arrival_date">2025-02-01</field>
+            <field name="departure_date">2025-05-31</field>
+            <field name="state">active</field>
+        </record>
+        <record id="participant_pedro" model="usbea.participant">
+            <field name="name">Pedro Henrique Costa</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="email">pedro.costa@email.com.br</field>
+            <field name="nationality" ref="base.br"/>
+            <field name="city">Rio de Janeiro</field>
+            <field name="role">participant</field>
+            <field name="visa_status">approved</field>
+            <field name="state">accepted</field>
+        </record>
+        <record id="participant_maria" model="usbea.participant">
+            <field name="name">Maria Fernanda Oliveira</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="email">maria.oliveira@email.com.br</field>
+            <field name="nationality" ref="base.br"/>
+            <field name="city">Brasilia</field>
+            <field name="role">participant</field>
+            <field name="visa_status">interview</field>
+            <field name="state">accepted</field>
+        </record>
+        <record id="participant_john" model="usbea.participant">
+            <field name="name">John Mitchell</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="email">j.mitchell@university.edu</field>
+            <field name="nationality" ref="base.us"/>
+            <field name="city">New York</field>
+            <field name="role">mentor</field>
+            <field name="visa_status">not_required</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- Events for Program 1 -->
+        <record id="event_orientation" model="usbea.program.event">
+            <field name="name">Welcome Orientation</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="event_type">orientation</field>
+            <field name="date_start">2025-02-01 09:00:00</field>
+            <field name="date_end">2025-02-01 17:00:00</field>
+            <field name="location">USBEA Office, Sao Paulo</field>
+            <field name="state">completed</field>
+        </record>
+        <record id="event_workshop_1" model="usbea.program.event">
+            <field name="name">Cross-Cultural Communication Workshop</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="event_type">workshop</field>
+            <field name="date_start">2025-02-15 14:00:00</field>
+            <field name="date_end">2025-02-15 18:00:00</field>
+            <field name="location">USP Conference Hall</field>
+            <field name="state">completed</field>
+        </record>
+        <record id="event_networking" model="usbea.program.event">
+            <field name="name">Alumni Networking Night</field>
+            <field name="program_id" ref="program_cultural_2025"/>
+            <field name="event_type">networking</field>
+            <field name="date_start">2025-03-20 19:00:00</field>
+            <field name="date_end">2025-03-20 22:00:00</field>
+            <field name="location">Hotel Unique, Sao Paulo</field>
+            <field name="state">confirmed</field>
+        </record>
+
+        <!-- Program 2: Leadership -->
+        <record id="program_leadership" model="usbea.program">
+            <field name="name">Emerging Leaders Cohort 2025</field>
+            <field name="program_type">leadership</field>
+            <field name="start_date">2025-03-01</field>
+            <field name="end_date">2026-02-28</field>
+            <field name="visa_type">none</field>
+            <field name="max_participants">30</field>
+            <field name="location">Virtual / Sao Paulo</field>
+            <field name="budget">60000.00</field>
+            <field name="state">recruiting</field>
+            <field name="grant_ids" eval="[(4, ref('usbea_grants.grant_ford_leadership'))]"/>
+            <field name="description">&lt;p&gt;Year-long leadership development program for emerging alumni leaders.&lt;/p&gt;</field>
+        </record>
+
+        <!-- Program 3: Professional Training -->
+        <record id="program_professional" model="usbea.program">
+            <field name="name">Professional Training - Tech Sector</field>
+            <field name="program_type">professional</field>
+            <field name="start_date">2025-06-01</field>
+            <field name="end_date">2025-08-31</field>
+            <field name="visa_type">j1</field>
+            <field name="visa_sponsor">CIEE</field>
+            <field name="max_participants">20</field>
+            <field name="location">Silicon Valley, CA</field>
+            <field name="budget">200000.00</field>
+            <field name="state">planning</field>
+            <field name="description">&lt;p&gt;Summer professional training program placing alumni at tech companies in Silicon Valley.&lt;/p&gt;</field>
+        </record>
+    </data>
+</odoo>

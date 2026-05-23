@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- User Profile Card View                       -->
+    <!-- (for users to edit their own profile)        -->
+    <!-- ============================================ -->
+
+    <!-- User profile action (for "My Profile" menu item) -->
+    <record id="action_my_profile" model="ir.actions.act_window">
+        <field name="name">My Profile</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">form</field>
+        <field name="res_id" eval="False"/>
+        <field name="context">{'form_view_ref': 'base.view_users_form'}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- User Profile List (for admins to browse team) -->
+    <record id="view_user_profile_kanban" model="ir.ui.view">
+        <field name="name">res.users.profile.kanban</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="login"/>
+                <field name="platform_role"/>
+                <field name="job_title_custom"/>
+                <field name="department_custom"/>
+                <field name="bio"/>
+                <field name="image_128"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <field name="image_128" widget="image"
+                                       options="{'size': [80, 80]}"/>
+                            </div>
+                            <div>
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted" t-if="record.job_title_custom.raw_value">
+                                    <field name="job_title_custom"/>
+                                </div>
+                                <div class="text-muted" t-if="record.department_custom.raw_value">
+                                    <field name="department_custom"/>
+                                </div>
+                                <div class="mt-1">
+                                    <field name="platform_role" widget="badge"
+                                           decoration-info="platform_role == 'super_admin'"
+                                           decoration-success="platform_role in ('org_admin', 'org_manager')"
+                                           decoration-warning="platform_role == 'org_member'"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Team Directory Action -->
+    <record id="action_team_directory" model="ir.actions.act_window">
+        <field name="name">Team Directory</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('active', '=', True), ('share', '=', False)]</field>
+        <field name="context">{'search_default_active_users': 1}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_user_profile_kanban')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('usbea_rbac.view_users_list_rbac')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No team members found
+            </p>
+            <p>
+                Your organization's team directory. Invite new members
+                from the Platform Admin menu.
+            </p>
+        </field>
+    </record>
+</odoo>
