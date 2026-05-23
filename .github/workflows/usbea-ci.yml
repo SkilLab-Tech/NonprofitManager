@@ -1,0 +1,178 @@
+name: USBEA CI
+
+# Scope: only runs on changes to USBEA custom modules and CI config.
+# Does NOT run on upstream Odoo file changes (would be O(thousands) of files
+# and is governed by Odoo's runbot).
+
+on:
+  pull_request:
+    paths:
+      - 'addons/usbea_*/**'
+      - '.github/workflows/usbea-ci.yml'
+      - 'pyproject.toml'
+      - 'docs/**'
+  push:
+    branches:
+      - 19.0
+    paths:
+      - 'addons/usbea_*/**'
+      - '.github/workflows/usbea-ci.yml'
+      - 'pyproject.toml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Ruff lint (usbea modules)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install ruff
+        run: pip install 'ruff>=0.11.4'
+      - name: List usbea modules
+        id: list_mods
+        run: |
+          mods=$(find addons -maxdepth 1 -type d -name 'usbea_*' -printf '%p ' || true)
+          echo "modules=$mods" >> "$GITHUB_OUTPUT"
+          if [ -z "$mods" ]; then
+            echo "No usbea_* modules found; skipping ruff."
+          fi
+      - name: Ruff check
+        if: steps.list_mods.outputs.modules != ''
+        run: ruff check ${{ steps.list_mods.outputs.modules }}
+
+  sast:
+    name: Bandit SAST (usbea modules)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bandit
+        run: pip install 'bandit[toml]>=1.7.10'
+      - name: List usbea modules
+        id: list_mods
+        run: |
+          mods=$(find addons -maxdepth 1 -type d -name 'usbea_*' -printf '%p ' || true)
+          echo "modules=$mods" >> "$GITHUB_OUTPUT"
+      - name: Bandit scan
+        if: steps.list_mods.outputs.modules != ''
+        run: |
+          # -ll: report MEDIUM and HIGH severity
+          # -ii: report MEDIUM and HIGH confidence
+          # -c: read from pyproject.toml
+          bandit -c pyproject.toml -ll -ii -r ${{ steps.list_mods.outputs.modules }}
+
+  unit-tests:
+    name: Unit tests + coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test deps
+        run: |
+          pip install pytest pytest-cov coverage
+          # Module-specific test deps installed by each module's tests/conftest.py
+      - name: List usbea modules
+        id: list_mods
+        run: |
+          mods=$(find addons -maxdepth 1 -type d -name 'usbea_*' -printf '%p ' || true)
+          echo "modules=$mods" >> "$GITHUB_OUTPUT"
+      - name: Run pytest (unit tests only — Odoo integration tests run separately)
+        if: steps.list_mods.outputs.modules != ''
+        run: |
+          # Each module's tests/ dir may contain pure-Python unit tests
+          # that don't require a full Odoo environment.
+          # Odoo integration tests (which require Postgres + full Odoo) are
+          # tracked separately — see issue tracker.
+          set +e
+          test_dirs=""
+          for mod in ${{ steps.list_mods.outputs.modules }}; do
+            if [ -d "$mod/tests" ] && find "$mod/tests" -name '*.py' -size +1c | grep -q .; then
+              test_dirs="$test_dirs $mod"
+            fi
+          done
+          if [ -z "$test_dirs" ]; then
+            echo "::warning::No usbea module has unit tests yet — coverage gate skipped"
+            exit 0
+          fi
+          pytest $test_dirs \
+            --cov=$(echo $test_dirs | tr ' ' ',') \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-fail-under=80
+      - name: Upload coverage
+        if: always() && steps.list_mods.outputs.modules != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+          if-no-files-found: ignore
+
+  manifest-check:
+    name: Module manifest validity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate __manifest__.py files
+        run: |
+          set -e
+          failed=0
+          for mod in addons/usbea_*/; do
+            manifest="$mod/__manifest__.py"
+            if [ ! -f "$manifest" ]; then
+              echo "::error file=$mod::Missing __manifest__.py"
+              failed=1
+              continue
+            fi
+            # Parse manifest as Python literal; verify required keys
+            python - <<PY
+          import ast, sys
+          with open("$manifest") as f:
+              data = ast.literal_eval(f.read())
+          required = ["name", "version", "depends", "license", "category"]
+          missing = [k for k in required if k not in data]
+          if missing:
+              print(f"::error file=$manifest::Missing required keys: {missing}")
+              sys.exit(1)
+          if data.get("license") not in ("LGPL-3", "AGPL-3", "OEEL-1"):
+              print(f"::warning file=$manifest::Unusual license: {data.get('license')}")
+          if not data.get("version", "").startswith("19.0."):
+              print(f"::error file=$manifest::Version must start with '19.0.' — got {data.get('version')!r}")
+              sys.exit(1)
+          PY
+          done
+          exit $failed
+
+  docs-check:
+    name: Docs links + spec coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check that every usbea_* module is documented in MODULES.md
+        run: |
+          if [ ! -f docs/MODULES.md ]; then
+            echo "::warning::docs/MODULES.md missing — skipping spec coverage check"
+            exit 0
+          fi
+          set -e
+          missing=0
+          for mod in addons/usbea_*/; do
+            name=$(basename "$mod")
+            if ! grep -q "$name" docs/MODULES.md; then
+              echo "::error file=$mod::Module $name is not referenced in docs/MODULES.md"
+              missing=1
+            fi
+          done
+          exit $missing

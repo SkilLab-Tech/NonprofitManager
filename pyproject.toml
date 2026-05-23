@@ -1,0 +1,64 @@
+# USBEA Nonprofit OS — Python tooling config
+#
+# This file configures tooling (pytest, coverage, bandit) for our custom
+# usbea_* modules. It does NOT replace Odoo's upstream setup.py / setup.cfg
+# which govern the Odoo package itself.
+#
+# Scope: tooling only — no package metadata.
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["addons"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+]
+markers = [
+    "unit: pure-Python unit tests (no Odoo environment required)",
+    "integration: requires running Odoo + Postgres (skipped in default CI)",
+    "lgpd: tests that exercise LGPD compliance behavior",
+    "ai: tests that exercise the usbea_ai layer (may mock Anthropic API)",
+]
+# Only collect tests from usbea_* modules — never collect upstream Odoo tests.
+collect_ignore_glob = [
+    "addons/[!u]*",          # everything that doesn't start with 'u'
+    "addons/us[!b]*",        # 'u' followed by anything other than 'sb'
+]
+
+[tool.coverage.run]
+branch = true
+source = ["addons"]
+# Only measure coverage on our custom modules.
+include = ["addons/usbea_*/*"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__manifest__.py",
+]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
+[tool.bandit]
+# SAST configuration for usbea_* modules.
+# We scope bandit only to our custom code; upstream Odoo has its own SAST process.
+exclude_dirs = [
+    "tests",
+    "migrations",
+]
+# Skip false-positives common in Odoo code:
+# B101: assert_used — Odoo uses assertions for invariants in business logic
+# B311: random_pseudo — Odoo uses random for non-crypto purposes (sequences, demos)
+skips = ["B101", "B311"]
